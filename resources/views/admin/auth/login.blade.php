@@ -1,10 +1,11 @@
 @extends('layouts.admin')
 
-<section id="hero" class="login">
+@section('content')
+<section class="login">
     <div class="container">
         <div class="row">
             <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
-                <div id="login">
+                <div>
                     <div class="text-center"><img src="/img/logo_sticky.png" alt="" data-retina="true" ></div>
                     <hr>
 
@@ -35,3 +36,4 @@
         </div>
     </div>
 </section>
+@endsection
