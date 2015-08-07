@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\BlogCategory;
+use App\Post;
+use App\Tag;
 use Illuminate\Routing\Router;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -25,6 +28,15 @@ class RouteServiceProvider extends ServiceProvider
     public function boot(Router $router)
     {
         //
+        $router->bind('slug', function($slug) {
+            return Post::where('slug', '=', $slug)->first();
+        });
+        $router->bind('category_name', function($value) {
+            return BlogCategory::where('name', '=', $value)->first();
+        });
+        $router->bind('tag_name', function($value) {
+            return Tag::where('tag', '=', $value)->first();
+        });
 
         parent::boot($router);
     }

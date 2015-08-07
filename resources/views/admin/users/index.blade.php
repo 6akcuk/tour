@@ -33,14 +33,14 @@
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
                         <td>
-                            <div class="pull-left"><a href="{{ route('admin.users.edit', $user) }}" class="btn_1">Edit</a></div>
-                            @if ($user->id != 1)
-                            <div class="pull-left btn_delete">
-                                {!! Form::open(['route' => ['admin.users.destroy', $user], 'method' => 'DELETE', 'onsubmit' => 'return confirm("Do you want to delete?")']) !!}
-                                <button class="btn_1">Delete</button>
-                                {!! Form::close() !!}
-                            </div>
-                            @endif
+                            @include('admin.partials.default_actions', [
+                                'updateRoute' => 'admin.users.edit',
+                                'destroyRoute' => 'admin.users.destroy',
+                                'deleteCondition' => function($model) {
+                                    return $model->id != 1;
+                                },
+                                'model' => $user
+                            ])
                         </td>
                     </tr>
                 @endforeach

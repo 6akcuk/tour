@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Blog;
+use App\Post;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -13,13 +13,19 @@ class BlogsController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $blogs = Blog::paginate(10);
+        if ($request->has('q')) {
+            $posts = Post::latest()->where('title', 'like', '%'. $request->input('q') .'%')->paginate(10);
+        }
+        else {
+            $posts = Post::latest()->paginate(10);
+        }
 
-        return view('admin.blogs.index', compact('blogs'));
+        return view('admin.blogs.index', compact('posts'));
     }
 
     /**
@@ -29,7 +35,7 @@ class BlogsController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**

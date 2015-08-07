@@ -1,45 +1,28 @@
-@extends('layouts.admin')
+@extends('admin.blogs.layout')
 
 @section('breadcrumbs')
     <li>Blogs Panel</li>
 @endsection
 
-@section('content')
-    <div class="row">
-        <aside class="col-md-3 add_bottom_30">
-            <div class="widget">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search...">
-                    <span class="input-group-btn">
-                        <button class="btn btn-default">
-                            <i class="icon-search"></i>
-                        </button>
-                    </span>
-                </div>
+@section('blogs_content')
+    <div class="box_style_1">
+        <h3>
+            Posts
+            <div class="pull-right">
+                <a class="btn_1" href="{{ route('admin.blogs.posts.create') }}">Add New Post</a>
             </div>
+        </h3>
 
-            <hr>
-
-            <div class="widget" id="cat_blog">
-                <h4>Menu</h4>
-
-                <ul>
-                    <li><a href="{{ route('admin.blogs.index') }}">Blogs</a></li>
-                    <li><a href="">Categories</a></li>
-                    <li><a href="">Tags</a></li>
-                </ul>
+        @foreach ($posts as $post)
+            <div class="post">
+                @include ('admin.blogs.posts.post')
             </div>
-        </aside>
-        <div class="col-md-9">
-            <div class="box_style_1">
-                @foreach ($blogs as $blog)
-                    <div class="post">
+        @endforeach
+    </div>
 
-                    </div>
-                @endforeach
-            </div>
+    <hr>
 
-            <hr>
-        </div>
+    <div class="text-center">
+        {!! $posts->appends(['q' => \Illuminate\Support\Facades\Request::input('q')])->render() !!}
     </div>
 @endsection

@@ -98,6 +98,10 @@ ul.list_order li span {background-color:#F16251;}
 
 }
 
+.label-info {
+  background-color: #F16251;
+}
+
 footer {
   background: #336655;
 }

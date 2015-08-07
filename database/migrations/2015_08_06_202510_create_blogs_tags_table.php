@@ -12,13 +12,13 @@ class CreateBlogsTagsTable extends Migration
      */
     public function up()
     {
-        Schema::create('blog_tag', function (Blueprint $table) {
-            $table->integer('blog_id')->unsigned();
+        Schema::create('post_tag', function (Blueprint $table) {
+            $table->integer('post_id')->unsigned();
             $table->integer('tag_id')->unsigned();
             $table->timestamps();
 
-            $table->foreign('blog_id')->references('id')->on('blogs');
-            $table->foreign('tag_id')->references('id')->on('tags');
+            $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
+            $table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade');
         });
     }
 
@@ -29,6 +29,6 @@ class CreateBlogsTagsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('blogs_tags');
+        Schema::drop('post_tag');
     }
 }

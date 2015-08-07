@@ -29,9 +29,7 @@
     });
 </script>
 
-<script>
-    @yield('footer_javascript')
-</script>
+@yield('footer_javascript')
 
 </body>
 </html>

@@ -12,12 +12,12 @@ class CreateBlogsTable extends Migration
      */
     public function up()
     {
-        Schema::create('blogs', function (Blueprint $table) {
+        Schema::create('posts', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('category_id')->unsigned();
-            $table->foreign('category_id')->references('id')->on('blog_categories');
+            $table->foreign('category_id')->references('id')->on('blog_categories')->onDelete('cascade');
             $table->integer('author_id')->unsigned();
-            $table->foreign('author_id')->references('id')->on('users');
+            $table->foreign('author_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('title');
             $table->string('slug');
             $table->string('photo');
@@ -33,6 +33,6 @@ class CreateBlogsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('blogs');
+        Schema::drop('posts');
     }
 }

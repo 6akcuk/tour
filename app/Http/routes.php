@@ -21,6 +21,16 @@ Route::group(['prefix' => 'admin'], function() {
     Route::group(['namespace' => 'Admin', 'middleware' => 'auth'], function() {
         Route::resource('/', 'DashboardController');
         Route::resource('users', 'UsersController');
+        Route::resource('blogs/categories', 'BlogCategoriesController');
+        Route::resource('blogs/posts', 'PostsController');
+        Route::resource('blogs/tags', 'TagsController');
         Route::resource('blogs', 'BlogsController');
     });
+});
+
+Route::group(['namespace' => 'Blogs'], function() {
+    Route::get('blogs', ['uses' => 'PostsController@index', 'as' => 'blogs.index']);
+    Route::get('blogs/{slug}', ['uses' => 'PostsController@show', 'as' => 'blogs.show']);
+    Route::get('blogs/category/{category_name}', ['uses' => 'PostsController@category', 'as' => 'blogs.category']);
+    Route::get('blogs/tag/{tag_name}', ['uses' => 'PostsController@tag', 'as' => 'blogs.tag']);
 });

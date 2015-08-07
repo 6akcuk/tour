@@ -12,10 +12,10 @@ $(window).load(function() { // makes sure the whole site is loaded
 $(window).scroll(function(){
     'use strict';
     if ($(this).scrollTop() > 1){  
-        $('header').addClass("sticky");
+        $('header[static!=""]').addClass("sticky");
     }
     else{
-        $('header').removeClass("sticky");
+        $('header[static!=""]').removeClass("sticky");
     }
 });
 
