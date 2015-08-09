@@ -20,7 +20,7 @@
                     <a href="#" class="open_close" id="close_in"><i class="icon_set_1_icon-77"></i></a>
                     <ul>
                         <li>
-                            <a href="/" class="show-submenu">Accommodation</a>
+                            <a href="{{ route('accommodations.index') }}" class="show-submenu">Accommodation</a>
                         </li>
                         <li>
                             <a href="javascript:void(0);">Tours</a>

@@ -2,6 +2,9 @@
 
 return [
 
+    'atlas_host' => 'atlas.atdw.com.au',
+    'atlas_key' => '201407151532',
+
     'regions' => [
         'All'               => 'All',
         'Adelaide'          => 'Adelaide City',

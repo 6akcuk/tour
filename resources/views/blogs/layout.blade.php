@@ -1,5 +1,7 @@
 @extends('layouts.main')
 
+@section('header', 'Blog')
+
 @section('content')
     <div class="row">
         <aside class="col-md-3 add_bottom_30">

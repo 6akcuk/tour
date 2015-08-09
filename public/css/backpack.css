@@ -46,6 +46,25 @@
   line-height: 34px !important;
 }
 
+/** Accommodations **/
+.hotel_container .hotel_title h3 {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.hotel_container .img_container {
+  width: 360px;
+  height: 230px;
+}
+.hotel_container .img_container img {
+  margin: 0 auto;
+}
+
+.strip_all_tour_list .img_list img {
+  position: static;
+}
+
 /** Typeahed **/
 .typeahead,
 .tt-query,

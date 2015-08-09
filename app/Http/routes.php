@@ -34,3 +34,5 @@ Route::group(['namespace' => 'Blogs'], function() {
     Route::get('blogs/category/{category_name}', ['uses' => 'PostsController@category', 'as' => 'blogs.category']);
     Route::get('blogs/tag/{tag_name}', ['uses' => 'PostsController@tag', 'as' => 'blogs.tag']);
 });
+
+Route::get('accommodations', ['uses' => 'AccommodationsController@index', 'as' => 'accommodations.index']);

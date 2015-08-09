@@ -22,7 +22,7 @@
 <section class="parallax-window" data-parallax="scroll" data-image-src="img/bg.jpg" data-natural-width="855" data-natural-height="584">
     <div class="parallax-content-1">
         <div class="animated">
-            <h1>Backpackers Blog</h1>
+            <h1>@yield('header')</h1>
         </div>
     </div>
 </section>
@@ -34,6 +34,10 @@
             @yield('breadcrumbs')
         </ul>
     </div>
+</div>
+
+<div class="collapse" id="collapseMap">
+    <div id="map" class="map"></div>
 </div>
 
 <div class="container margin_60">
