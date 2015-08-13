@@ -55,5 +55,10 @@
                 });
             }
         });
+
+        $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
+            $(e.relatedTarget.hash + '_top').hide();
+            $(e.target.hash + '_top').show();
+        })
     </script>
 @endsection

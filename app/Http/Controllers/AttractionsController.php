@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\AccommodationService;
 use App\Jobs\ATLASService;
+use App\Jobs\TourService;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class AccommodationsController extends Controller
+class AttractionsController extends Controller
 {
     public function index(Request $request, ATLASService $ATLASService)
     {
@@ -47,48 +47,48 @@ class AccommodationsController extends Controller
         $params['facets'] = 'cla'; // Additionally retrieve number of results in all types
         if (sizeof($order)) $params['order'] = implode(', ', $order);
 
-        $accommodations = $ATLASService->accommodations($params);
+        $attractions = $ATLASService->attractions($params);
 
         unset($params['cla']);
-        $total = $ATLASService->accommodations(array_merge([
-            'dsc' => 'false',
-            'fl' => 'product_id',
+        $total = $ATLASService->attractions(array_merge([
+                'dsc' => 'false',
+                'fl' => 'product_id',
         ], $params));
 
         $paginator = new \Illuminate\Pagination\LengthAwarePaginator(
-            $accommodations['products'],
-            $accommodations['numberOfResults'],
-            $params['size'],
-            $params['pge'],
-            [
-                'path' => route('accommodations.index'),
-                'query' => $request->all()
-            ]
+                $attractions['products'],
+                $attractions['numberOfResults'],
+                $params['size'],
+                $params['pge'],
+                [
+                        'path' => route('attractions.index'),
+                        'query' => $request->all()
+                ]
         );
 
-        //dd($accommodations);
+        //dd($attractions);
 
-        return view('accommodations.list', compact('accommodations', 'total', 'paginator'));
+        return view('attractions.list', compact('attractions', 'total', 'paginator'));
     }
 
-    public function show(ATLASService $ATLASService, AccommodationService $accommodationService, $id)
+    public function show(ATLASService $ATLASService, TourService $tourService, $id)
     {
         $model = $ATLASService->getProduct($id);
 
-        $accommodationService->set($model);
-        $services = $accommodationService->getServices();
+        $tourService->set($model);
+        $services = $tourService->getServices();
 
-        $coord = $accommodationService->getCoordinates();
+        $coord = $tourService->getCoordinates();
 
-        $nearest = $ATLASService->accommodations([
-            'fl' => 'product_id,product_name,product_description,product_image,geo',
-            'latlong' => $coord['lat'] .','. $coord['long'],
-            'dist' => 50,
-            'size' => 20
+        $nearest = $ATLASService->attractions([
+                'fl' => 'product_id,product_name,product_description,product_image,geo',
+                'latlong' => $coord['lat'] .','. $coord['long'],
+                'dist' => 50,
+                'size' => 20
         ]);
 
         //dd($model);
 
-        return view('accommodations.show', ['model' => $accommodationService, 'nearest' => $nearest]);
+        return view('attractions.show', ['model' => $tourService, 'nearest' => $nearest]);
     }
 }

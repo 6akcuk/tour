@@ -10,7 +10,7 @@
     <meta name="keywords" content="template, tour template, city tours, city tour, tours tickets, transfers, travel, travel template" />
     <meta name="description" content="Citytours - Premium site template for city tours agencies, transfers and tickets.">
     <meta name="author" content="Ansonika">
-    <title>Backpackers - @yield('title')</title>
+    <title>@yield('title') - Backpackers</title>
 
     <!-- Favicons-->
     <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">

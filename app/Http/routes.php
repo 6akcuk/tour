@@ -36,3 +36,17 @@ Route::group(['namespace' => 'Blogs'], function() {
 });
 
 Route::get('accommodations', ['uses' => 'AccommodationsController@index', 'as' => 'accommodations.index']);
+Route::get('accommodations/show/{id}', ['uses' => 'AccommodationsController@show', 'as' => 'accommodations.show']);
+
+Route::get('tours', ['uses' => 'ToursController@index', 'as' => 'tours.index']);
+Route::get('tours/show/{id}', ['uses' => 'ToursController@show', 'as' => 'tours.show']);
+
+Route::get('attractions', ['uses' => 'AttractionsController@index', 'as' => 'attractions.index']);
+Route::get('attractions/show/{id}', ['uses' => 'AttractionsController@show', 'as' => 'attractions.show']);
+
+Route::get('events', ['uses' => 'EventsController@index', 'as' => 'events.index']);
+Route::get('events/show/{id}', ['uses' => 'EventsController@show', 'as' => 'events.show']);
+
+Route::get('hires', ['uses' => 'HiresController@index', 'as' => 'hires.index']);
+Route::get('hires/show/{id}', ['uses' => 'HiresController@show', 'as' => 'hires.show']);
+

@@ -22,7 +22,7 @@
 <section id="search_container">
     <div id="search">
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#accommodation" data-toggle="tab">Accommodation</a></li>
+            <li class="active"><a href="#accommodations" data-toggle="tab">Accommodation</a></li>
             <li class=""><a href="#tours" data-toggle="tab">Tours</a></li>
             <li class=""><a href="#attractions" data-toggle="tab">Attractions</a></li>
             <li class=""><a href="#events" data-toggle="tab">Events</a></li>
@@ -30,7 +30,7 @@
         </ul>
 
         <div class="tab-content">
-            <div class="tab-pane active" id="accommodation">
+            <div class="tab-pane active" id="accommodations">
                 <form action="{{ route('accommodations.index') }}" method="get">
                     <h3>Search Accomodation in Australia</h3>
                     <div class="row">
@@ -230,30 +230,88 @@
     <div class="row">
 
         @foreach ($accommodations['products'] as $acc)
-        <div class="col-md-4 col-sm-6 wow zoomIn" data-wow-delay="0.1s">
-            <div class="hotel_container">
-                <div class="img_container">
-                    <a href="#">
-                        <img src="{{ $acc['productImage'] }}" class="img-responsive" alt="">
-                        <div class="ribbon top_rated"></div>
-                        <div class="short_info">
-                            <i class="icon_set_1_icon-23"></i>{{ $acc['productClassifications'][0] }}<span class="price"><sup>AUD $</sup>{{ (int)$acc['rateFrom'] }}</span>
-                        </div>
-                    </a>
-                </div>
-                <div class="hotel_title">
-                    <h3><strong>{{ $acc['productName'] }}</strong></h3>
-                    <div class="rating">
-                        @include('layouts.partials.rating', ['rating' => $acc['starRating']])
-                    </div><!-- end rating -->
-                </div>
-            </div><!-- End box tour -->
-        </div><!-- End col-md-4 -->
+            @include('accommodations.partials.grid_element', ['columns' => 3])
         @endforeach
 
     </div><!-- End row -->
     <p class="text-center nopadding">
         <a href="{{ route('accommodations.index') }}" class="btn_1 medium"><i class="icon-eye-7"></i>View all accommodations ({{ $accommodations['numberOfResults'] }}) </a>
+    </p>
+</div><!-- End container -->
+
+<div id="tours_top" class="container margin_60" style="display: none">
+
+    <div class="main_title">
+        <h2>Australia <span>Top</span> Tours</h2>
+        <p>Quisque at tortor a libero posuere laoreet vitae sed arcu. Curabitur consequat.</p>
+    </div>
+
+    <div class="row">
+
+        @foreach ($tours['products'] as $tour)
+            @include('tours.partials.grid_element', ['columns' => 3])
+        @endforeach
+
+    </div><!-- End row -->
+    <p class="text-center nopadding">
+        <a href="{{ route('tours.index') }}" class="btn_1 medium"><i class="icon-eye-7"></i>View all tours ({{ $tours['numberOfResults'] }}) </a>
+    </p>
+</div><!-- End container -->
+
+<div id="attractions_top" class="container margin_60" style="display: none">
+
+    <div class="main_title">
+        <h2>Australia <span>Top</span> Attractions</h2>
+        <p>Quisque at tortor a libero posuere laoreet vitae sed arcu. Curabitur consequat.</p>
+    </div>
+
+    <div class="row">
+
+        @foreach ($attractions['products'] as $attraction)
+            @include('attractions.partials.grid_element', ['columns' => 3])
+        @endforeach
+
+    </div><!-- End row -->
+    <p class="text-center nopadding">
+        <a href="{{ route('attractions.index') }}" class="btn_1 medium"><i class="icon-eye-7"></i>View all attractions ({{ $attractions['numberOfResults'] }}) </a>
+    </p>
+</div><!-- End container -->
+
+<div id="events_top" class="container margin_60" style="display: none">
+
+    <div class="main_title">
+        <h2>Australia <span>Top</span> Events</h2>
+        <p>Quisque at tortor a libero posuere laoreet vitae sed arcu. Curabitur consequat.</p>
+    </div>
+
+    <div class="row">
+
+        @foreach ($events['products'] as $event)
+            @include('events.partials.grid_element', ['columns' => 3])
+        @endforeach
+
+    </div><!-- End row -->
+    <p class="text-center nopadding">
+        <a href="{{ route('events.index') }}" class="btn_1 medium"><i class="icon-eye-7"></i>View all events ({{ $events['numberOfResults'] }}) </a>
+    </p>
+</div><!-- End container -->
+
+<div id="hires_top" class="container margin_60" style="display: none">
+
+    <div class="main_title">
+        <h2>Australia <span>Top</span> Hires</h2>
+        <p>Quisque at tortor a libero posuere laoreet vitae sed arcu. Curabitur consequat.</p>
+    </div>
+
+    <div class="row">
+
+        @foreach ($hires['products'] as $hire)
+            @include('hires.partials.grid_element', ['columns' => 3])
+        @endforeach
+
+    </div><!-- End row -->
+    <p class="text-center nopadding">
+        <a href="{{ route('hires.index') }}" class="btn_1 medium"><i class="icon-eye-7"></i>View all hires ({{ $hires['numberOfResults'] }}) </a>
     </p>
 </div><!-- End container -->
 

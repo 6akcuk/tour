@@ -20,9 +20,9 @@
 @include('layouts.partials.nav')
 
 <section class="parallax-window" data-parallax="scroll" data-image-src="@yield('main_bg', 'img/bg.jpg')" data-natural-width="855" data-natural-height="584">
-    <div class="parallax-content-1">
-        <div class="animated">
-            <h1>@yield('header')</h1>
+    <div class="parallax-content-2">
+        <div class="container">
+            @yield('parallax_content')
         </div>
     </div>
 </section>

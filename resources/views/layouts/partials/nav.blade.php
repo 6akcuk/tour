@@ -23,16 +23,16 @@
                             <a href="{{ route('accommodations.index') }}" class="show-submenu">Accommodation</a>
                         </li>
                         <li>
-                            <a href="javascript:void(0);">Tours</a>
+                            <a href="{{ route('tours.index') }}">Tours</a>
                         </li>
                         <li>
-                            <a href="javascript:void(0);">Attractions</a>
+                            <a href="{{ route('attractions.index') }}">Attractions</a>
                         </li>
                         <li>
-                            <a href="javascript:void(0);">Events</a>
+                            <a href="{{ route('events.index') }}">Events</a>
                         </li>
                         <li>
-                            <a href="javascript:void(0);">Hire</a>
+                            <a href="{{ route('hires.index') }}">Hire</a>
                         </li>
                         <li>
                             <a href="/blogs">Blogs</a>

@@ -46,6 +46,17 @@
   line-height: 34px !important;
 }
 
+#map {
+  height: 500px;
+}
+#marker_info {
+  height: auto;
+  padding-bottom: 15px;
+}
+#marker_info img {
+  width: 280px;
+}
+
 /** Accommodations **/
 .hotel_container .hotel_title h3 {
   text-overflow: ellipsis;
@@ -54,7 +65,7 @@
 }
 
 .hotel_container .img_container {
-  width: 360px;
+  /*width: 360px;*/
   height: 230px;
 }
 .hotel_container .img_container img {

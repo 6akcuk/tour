@@ -102,6 +102,10 @@ ul.list_order li span {background-color:#F16251;}
   background-color: #F16251;
 }
 
+#price_single_main span {
+  color: #F16251;
+}
+
 footer {
   background: #336655;
 }

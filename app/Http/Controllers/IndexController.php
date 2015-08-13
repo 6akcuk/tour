@@ -14,7 +14,11 @@ class IndexController extends Controller
     public function welcome(ATLASService $ATLASService)
     {
         $accommodations = $ATLASService->topAccommodations();
-//dd($accommodations);
-        return view('welcome', compact('accommodations'));
+        $tours = $ATLASService->topTours();
+        $attractions = $ATLASService->topAttractions();
+        $events = $ATLASService->topEvents();
+        $hires = $ATLASService->topHires();
+
+        return view('welcome', compact('accommodations', 'tours', 'attractions', 'events', 'hires'));
     }
 }

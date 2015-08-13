@@ -9,20 +9,20 @@
             <div class="col-md-3 col-sm-3">
                 <h3>About</h3>
                 <ul>
-                    <li><a href="#">About us</a></li>
+                    <li><a href="{{ url('/blogs/about-us') }}">About us</a></li>
                     <li><a href="{{ route('blogs.index') }}">Blogs</a></li>
                     <li><a href="{{ url('/admin/auth/login') }}">Login</a></li>
-                    <li><a href="#">Terms and condition</a></li>
+                    <li><a href="{{ url('/blogs/terms-and-condition') }}">Terms and condition</a></li>
                 </ul>
             </div>
             <div class="col-md-3 col-sm-3">
                 <h3>Discover</h3>
                 <ul>
-                    <li><a href="#">Accommodation</a></li>
-                    <li><a href="#">Tours</a></li>
-                    <li><a href="#">Attractions</a></li>
-                    <li><a href="#">Events</a></li>
-                    <li><a href="#">Hire</a></li>
+                    <li><a href="{{ route('accommodations.index') }}">Accommodation</a></li>
+                    <li><a href="{{ route('tours.index') }}">Tours</a></li>
+                    <li><a href="{{ route('attractions.index') }}">Attractions</a></li>
+                    <li><a href="{{ route('events.index') }}">Events</a></li>
+                    <li><a href="{{ route('hires.index') }}">Hire</a></li>
                 </ul>
             </div>
             <div class="col-md-2 col-sm-3">
