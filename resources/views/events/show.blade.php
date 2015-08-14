@@ -30,8 +30,8 @@
 
 @section('content')
     <div class="row">
-        <div class="col-md-8" id="single_event_desc">
-            <div id="single_event_feat">
+        <div class="col-md-8" id="single_tour_desc">
+            <div id="single_tour_feat">
                 <ul>
                     @if ($model->hasAttribute('BAR'))
                         <li>

@@ -1,4 +1,4 @@
-<div class="strip_all_attraction_list wow fadeIn animated" data-wow-delay="0.1s">
+<div class="strip_all_tour_list wow fadeIn animated" data-wow-delay="0.1s">
     <div class="row">
         <div class="col-lg-4 col-md-4 col-sm-4">
             <div class="img_list">
@@ -10,7 +10,7 @@
         </div>
         <div class="clearfix visible-xs-block"></div>
         <div class="col-lg-6 col-md-6 col-sm-6">
-            <div class="attraction_list_desc">
+            <div class="tour_list_desc">
                 <div class="rating">
                     @include('layouts.partials.rating', ['rating' => $attraction['starRating']])
                 </div>
