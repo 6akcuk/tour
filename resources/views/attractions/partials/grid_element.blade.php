@@ -11,9 +11,6 @@
         </div>
         <div class="hotel_title">
             <h3><strong>{{ $attraction['productName'] }}</strong></h3>
-            <div class="rating">
-                @include('layouts.partials.rating', ['rating' => $attraction['starRating']])
-            </div><!-- end rating -->
         </div>
     </div><!-- End box attraction -->
 </div><!-- End col-md-4 -->

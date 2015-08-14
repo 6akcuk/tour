@@ -11,9 +11,6 @@
         </div>
         <div class="hotel_title">
             <h3><strong>{{ $hire['productName'] }}</strong></h3>
-            <div class="rating">
-                @include('layouts.partials.rating', ['rating' => $hire['starRating']])
-            </div><!-- end rating -->
         </div>
     </div><!-- End box hire -->
 </div><!-- End col-md-4 -->

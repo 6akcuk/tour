@@ -81,7 +81,7 @@ $('#collapseMap').on('shown.bs.collapse', function(e){
 			return new InfoBox({
 				content:
 				'<div class="marker_info" id="marker_info">' +
-				'<img src="' + item.map_image_url + '" alt=""/>' +
+				'<a href="'+ item.url_point + '"><img src="' + item.map_image_url + '" alt=""/></a>' +
 				'<h3>'+ item.name_point +'</h3>' +
 				'<span>'+ item.description_point +'</span>' +
 				'<a href="'+ item.url_point + '" class="btn_1">Details</a>' +

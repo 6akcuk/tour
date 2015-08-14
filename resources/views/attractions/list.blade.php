@@ -41,7 +41,7 @@
         </div>
     </div>
 
-    @foreach ($attractions['products'] as $idx => $attraction)
+    @forelse ($attractions['products'] as $idx => $attraction)
         @if (Request::input('grid'))
             @if ($idx % 2 == 0) <div class="row"> @endif
             @include('attractions.partials.grid_element', ['columns' => 2])
@@ -49,7 +49,9 @@
         @else
             @include('attractions.partials.list_element')
         @endif
-    @endforeach
+    @empty
+        <div class="text-center">No attractions founded.</div>
+    @endforelse
 
     <hr>
 
@@ -59,34 +61,16 @@
 @endsection
 
 @section('footer_javascript')
-    <script src="js/sort_product.js"></script>
-    <script src="http://maps.googleapis.com/maps/api/js"></script>
-    <script src="js/infobox.js"></script>
-    <script src="js/map.js"></script>
-    <script>
-        var markersData = {
-            'Walking': [
-                @foreach ($attractions['products'] as $attraction)
-                @if (!stristr($attraction['boundary'], 'MULTIPOINT'))
-                <?php $coord = explode(',', $attraction['boundary']) ?>
-                    {
-                    name: '{{ $attraction['productName'] }}',
-                    location_latitude: {{ $coord[0] }},
-                    location_longitude: {{ $coord[1] }},
-                    map_image_url: '{{ $attraction['productImage'] }}',
-                    name_point: '{{ $attraction['productName'] }}',
-                    description_point: '{!! rtrim(str_replace("\n", '\\', nl2br(addslashes(substr($attraction['productDescription'], 0, 50)))), '\\') !!}',
-                    url_point: '{{ route('attractions.show', explode('$', $attraction['productId'])[0]) }}'
-                },
-                @endif
-                @endforeach
-                ]
-        };
+    @if (sizeof($attractions['products']))
+    <?php $coord = explode(',', $attractions['products'][0]['boundary']) ?>
 
-        <?php $coord = explode(',', $attractions['products'][0]['boundary']) ?>
-
-        var mapZoom = 6;
-        var latitude = {{ $coord[0] }};
-        var longitude = {{ $coord[1] }};
-    </script>
+    @include('layouts.partials.show_js', [
+        'zoom' => 6,
+        'lat' => $coord[0],
+        'long' => $coord[1],
+        'marker' => 'Walking',
+        'products' => $attractions['products'],
+        'route' => 'attractions.show'
+    ])
+    @endif
 @endsection

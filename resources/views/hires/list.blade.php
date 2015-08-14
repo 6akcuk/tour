@@ -41,7 +41,7 @@
         </div>
     </div>
 
-    @foreach ($hires['products'] as $idx => $hire)
+    @forelse ($hires['products'] as $idx => $hire)
         @if (Request::input('grid'))
             @if ($idx % 2 == 0) <div class="row"> @endif
             @include('hires.partials.grid_element', ['columns' => 2])
@@ -49,7 +49,9 @@
         @else
             @include('hires.partials.list_element')
         @endif
-    @endforeach
+    @empty
+        <div class="text-center">No hires founded.</div>
+    @endforelse
 
     <hr>
 
@@ -59,34 +61,16 @@
 @endsection
 
 @section('footer_javascript')
-    <script src="js/sort_product.js"></script>
-    <script src="http://maps.googleapis.com/maps/api/js"></script>
-    <script src="js/infobox.js"></script>
-    <script src="js/map.js"></script>
-    <script>
-        var markersData = {
-            'Walking': [
-                @foreach ($hires['products'] as $hire)
-                @if (!stristr($hire['boundary'], 'MULTIPOINT'))
-                <?php $coord = explode(',', $hire['boundary']) ?>
-                    {
-                    name: '{{ $hire['productName'] }}',
-                    location_latitude: {{ $coord[0] }},
-                    location_longitude: {{ $coord[1] }},
-                    map_image_url: '{{ $hire['productImage'] }}',
-                    name_point: '{{ $hire['productName'] }}',
-                    description_point: '{!! rtrim(str_replace("\n", '\\', nl2br(addslashes(substr($hire['productDescription'], 0, 50)))), '\\') !!}',
-                    url_point: '{{ route('hires.show', explode('$', $hire['productId'])[0]) }}'
-                },
-                @endif
-                @endforeach
-                ]
-        };
+    @if (sizeof($hires['products']))
+    <?php $coord = explode(',', $hires['products'][0]['boundary']) ?>
 
-        <?php $coord = explode(',', $hires['products'][0]['boundary']) ?>
-
-        var mapZoom = 6;
-        var latitude = {{ $coord[0] }};
-        var longitude = {{ $coord[1] }};
-    </script>
+    @include('layouts.partials.show_js', [
+        'zoom' => 6,
+        'lat' => $coord[0],
+        'long' => $coord[1],
+        'marker' => 'Walking',
+        'products' => $hires['products'],
+        'route' => 'hires.show'
+    ])
+    @endif
 @endsection

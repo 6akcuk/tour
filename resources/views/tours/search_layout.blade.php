@@ -13,7 +13,7 @@
                     @foreach (config('tours.tours_types') as $type => $name)
                         <li>
                             <a href="{{ route('tours.index', array_merge(Request::all(), ['type' => $type])) }}" id="{{ Request::input('type') == $type || ($type == '' && !Request::input('type')) ? 'active' : '' }}">
-                                {{ $name }} ({{ $type == '' ? $total['numberOfResults'] : $tours['facetGroups'][0]['facets'][array_search($type, array_column($tours['facetGroups'][0]['facets'], 'name'))]['count'] }})
+                                {{ $name }} ({{ $type == '' || $tours['numberOfResults'] == 0 ? $total['numberOfResults'] : $tours['facetGroups'][0]['facets'][array_search($type, array_column($tours['facetGroups'][0]['facets'], 'name'))]['count'] }})
                             </a>
                         </li>
                     @endforeach
@@ -36,21 +36,6 @@
                                         From ${{ min($rra) }} @if (max($rra) < 30000) to ${{ max($rra) }} @endif
                                     </label>
                                 </li>
-                            @endforeach
-                        </ul>
-                    </div>
-                    <div class="filter_type">
-                        <h6>Star Category</h6>
-                        <ul>
-                            @foreach ([5, 4, 3, 2, 1] as $sr)
-                            <li>
-                                <label>
-                                    <input type="checkbox" name="rating[]" value="{{ $sr }}" {{ Request::input('rating') && in_array($sr, Request::input('rating')) ? 'checked' : '' }}>
-                                <span class="rating">
-                                    @include('layouts.partials.rating', ['rating' => $sr, 'class' => 'icon_set_1_icon-81'])
-                                </span>
-                                </label>
-                            </li>
                             @endforeach
                         </ul>
                     </div>

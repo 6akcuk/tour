@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\ATLASService;
+use App\Jobs\AttractionService;
 use App\Jobs\TourService;
 use Illuminate\Http\Request;
 
@@ -20,6 +21,7 @@ class AttractionsController extends Controller
         if ($request->input('state')) $params['st'] = $request->input('state');
         if ($request->input('region')) $params['rg'] = $request->input('region');
         if ($request->input('city')) $params['ct'] = $request->input('city');
+
         if ($request->input('rating')) {
             $params['ratings'] = implode(',', $request->input('rating'));
         }
@@ -31,6 +33,14 @@ class AttractionsController extends Controller
 
             $params['minRate'] = min($rates);
             $params['maxRate'] = max($rates);
+        }
+        if ($request->input('filter')) {
+            $exp = [];
+            foreach ($request->input('filter') as $fl) {
+                $exp[] = 'EXPERIENCE'. strtoupper(str_replace('_', '', $fl));
+            }
+
+            $params['att'] = implode('|', $exp);
         }
 
         $order = [];
@@ -71,14 +81,14 @@ class AttractionsController extends Controller
         return view('attractions.list', compact('attractions', 'total', 'paginator'));
     }
 
-    public function show(ATLASService $ATLASService, TourService $tourService, $id)
+    public function show(ATLASService $ATLASService, AttractionService $attractionService, $id)
     {
         $model = $ATLASService->getProduct($id);
 
-        $tourService->set($model);
-        $services = $tourService->getServices();
+        $attractionService->set($model);
+        $services = $attractionService->getServices();
 
-        $coord = $tourService->getCoordinates();
+        $coord = $attractionService->getCoordinates();
 
         $nearest = $ATLASService->attractions([
                 'fl' => 'product_id,product_name,product_description,product_image,geo',
@@ -89,6 +99,6 @@ class AttractionsController extends Controller
 
         //dd($model);
 
-        return view('attractions.show', ['model' => $tourService, 'nearest' => $nearest]);
+        return view('attractions.show', ['model' => $attractionService, 'nearest' => $nearest]);
     }
 }

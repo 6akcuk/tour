@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Jobs\ATLASService;
 use App\Jobs\TourService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -20,6 +21,16 @@ class ToursController extends Controller
         if ($request->input('state')) $params['st'] = $request->input('state');
         if ($request->input('region')) $params['rg'] = $request->input('region');
         if ($request->input('city')) $params['ct'] = $request->input('city');
+        if ($request->input('from')) {
+            $from = Carbon::parse($request->input('from'))->format('Y-m-d');
+
+            $params['start'] = $from;
+        }
+        if ($request->input('to')) {
+            $to = Carbon::parse($request->input('to'))->format('Y-m-d');
+
+            $params['end'] = $to;
+        }
         if ($request->input('rating')) {
             $params['ratings'] = implode(',', $request->input('rating'));
         }

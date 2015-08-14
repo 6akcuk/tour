@@ -11,9 +11,6 @@
         <div class="clearfix visible-xs-block"></div>
         <div class="col-lg-6 col-md-6 col-sm-6">
             <div class="tour_list_desc">
-                <div class="rating">
-                    @include('layouts.partials.rating', ['rating' => $attraction['starRating']])
-                </div>
                 <h3>{{ $attraction['productName'] }}</h3>
                 <p>
                     {{ substr($attraction['productDescription'], 0, 100) .'...' }}
@@ -26,7 +23,7 @@
                     <sup>$</sup>
                     {{ (int)$attraction['rateFrom'] }}*
                     <span class="normal_price_list"></span>
-                    <small>*From/Per night</small>
+                    <small>*From/Per person</small>
                     <p>
                         <a href="{{ route('attractions.show', explode('$', $attraction['productId'])[0]) }}" class="btn_1">Details</a>
                     </p>

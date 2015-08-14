@@ -11,9 +11,6 @@
         <div class="clearfix visible-xs-block"></div>
         <div class="col-lg-6 col-md-6 col-sm-6">
             <div class="tour_list_desc">
-                <div class="rating">
-                    @include('layouts.partials.rating', ['rating' => $hire['starRating']])
-                </div>
                 <h3>{{ $hire['productName'] }}</h3>
                 <p>
                     {{ substr($hire['productDescription'], 0, 100) .'...' }}

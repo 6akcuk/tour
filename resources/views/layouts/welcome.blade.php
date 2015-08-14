@@ -52,13 +52,13 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label><i class="icon-calendar-7"></i> Check in</label>
-                                <input class="date-pick form-control" data-date-format="M d, D" type="text" name="check_in">
+                                <input class="date-pick form-control" data-date-format="M d, D" type="text" name="from">
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label><i class="icon-calendar-7"></i> Check out</label>
-                                <input class="date-pick form-control" data-date-format="M d, D" type="text" name="check_out">
+                                <input class="date-pick form-control" data-date-format="M d, D" type="text" name="to">
                             </div>
                         </div>
                         <div class="col-md-2 col-sm-3 col-xs-5">
@@ -84,7 +84,7 @@
             </div>
 
             <div class="tab-pane" id="tours">
-                <form>
+                <form action="{{ route('tours.index') }}" method="get">
                     <h3>Search Tours in Australia</h3>
                     <div class="row">
                         <div class="col-md-6">
@@ -121,7 +121,7 @@
             </div><!-- End rab -->
 
             <div class="tab-pane" id="attractions">
-                <form>
+                <form action="{{ route('attractions.index') }}" method="get">
                     <h3>Search Attractions in Australia</h3>
                     <div class="row">
                         <div class="col-md-6">
@@ -153,68 +153,72 @@
             </div>
 
             <div class="tab-pane" id="events">
-                <h3>Search Events in Australia</h3>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Search terms</label>
-                            <input type="text" class="form-control" id="events_name" name="terms" placeholder="Optionally type event name or town">
+                <form action="{{ route('events.index') }}" method="get">
+                    <h3>Search Events in Australia</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Search terms</label>
+                                <input type="text" class="form-control" id="events_name" name="terms" placeholder="Optionally type event name or town">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Event type</label>
-                            {!! Form::select('type', config('tours.events_types'), null, ['class' => 'form-control']) !!}
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Event type</label>
+                                {!! Form::select('type', config('tours.events_types'), null, ['class' => 'form-control']) !!}
+                            </div>
                         </div>
-                    </div>
-                </div><!-- End row -->
-                <div class="row geo_search"></div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label><i class="icon-calendar-7"></i> From</label>
-                            <input class="date-pick form-control" data-date-format="M d, D" type="text" name="from">
+                    </div><!-- End row -->
+                    <div class="row geo_search"></div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label><i class="icon-calendar-7"></i> From</label>
+                                <input class="date-pick form-control" data-date-format="M d, D" type="text" name="from">
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label><i class="icon-calendar-7"></i> To</label>
-                            <input class="date-pick form-control" data-date-format="M d, D" type="text" name="to">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label><i class="icon-calendar-7"></i> To</label>
+                                <input class="date-pick form-control" data-date-format="M d, D" type="text" name="to">
+                            </div>
                         </div>
-                    </div>
-                </div><!-- End row -->
-                <div class="row">
-                    @foreach (config('tours.events_filters') as $value => $label)
-                        <div class="col-md-4 col-sm-4 col-xs-6">
-                            <label>
-                                <input type="checkbox" name="filter[]" value="{{ $value }}"> {{ $label }}
-                            </label>
-                        </div>
-                    @endforeach
-                </div> <!-- End row -->
-                <hr>
-                <button class="btn_1 green"><i class="icon-search"></i>Search now</button>
+                    </div><!-- End row -->
+                    <div class="row">
+                        @foreach (config('tours.events_filters') as $value => $label)
+                            <div class="col-md-4 col-sm-4 col-xs-6">
+                                <label>
+                                    <input type="checkbox" name="filter[]" value="{{ $value }}"> {{ $label }}
+                                </label>
+                            </div>
+                        @endforeach
+                    </div> <!-- End row -->
+                    <hr>
+                    <button class="btn_1 green"><i class="icon-search"></i>Search now</button>
+                </form>
             </div>
 
             <div class="tab-pane" id="hires">
-                <h3>Search Hires in Australia</h3>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Search terms</label>
-                            <input type="text" class="form-control" id="hires_name" name="terms" placeholder="Optionally type business name">
+                <form action="{{ route('hires.index') }}" method="get">
+                    <h3>Search Hires in Australia</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Search terms</label>
+                                <input type="text" class="form-control" id="hires_name" name="terms" placeholder="Optionally type business name">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Hire type</label>
+                                {!! Form::select('type', config('tours.hires_types'), null, ['class' => 'form-control']) !!}
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Hire type</label>
-                            {!! Form::select('type', config('tours.hires_types'), null, ['class' => 'form-control']) !!}
-                        </div>
-                    </div>
-                </div>
-                <div class="row geo_search"></div>
-                <hr>
-                <button class="btn_1 green"><i class="icon-search"></i>Search now</button>
+                    <div class="row geo_search"></div>
+                    <hr>
+                    <button class="btn_1 green"><i class="icon-search"></i>Search now</button>
+                </form>
             </div>
         </div>
     </div>

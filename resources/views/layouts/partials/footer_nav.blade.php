@@ -27,7 +27,7 @@
             </div>
             <div class="col-md-2 col-sm-3">
                 <div id="logo">
-                    <a href="/"><img src="img/logo_sticky.png" width="160" height="34" alt="City tours" data-retina="true" class="logo_sticky"></a>
+                    <a href="/"><img src="img/logo_sticky.png" width="258" height="34" alt="City tours" data-retina="true" class="logo_sticky"></a>
                 </div>
             </div>
         </div><!-- End row -->

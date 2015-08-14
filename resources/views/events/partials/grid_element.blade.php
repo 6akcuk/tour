@@ -11,9 +11,6 @@
         </div>
         <div class="hotel_title">
             <h3><strong>{{ $event['productName'] }}</strong></h3>
-            <div class="rating">
-                @include('layouts.partials.rating', ['rating' => $event['starRating']])
-            </div><!-- end rating -->
         </div>
     </div><!-- End box event -->
 </div><!-- End col-md-4 -->

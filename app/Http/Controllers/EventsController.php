@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\ATLASService;
+use App\Jobs\EventService;
 use App\Jobs\TourService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -20,6 +22,25 @@ class EventsController extends Controller
         if ($request->input('state')) $params['st'] = $request->input('state');
         if ($request->input('region')) $params['rg'] = $request->input('region');
         if ($request->input('city')) $params['ct'] = $request->input('city');
+        if ($request->input('from')) {
+            $from = Carbon::parse($request->input('from'))->format('Y-m-d');
+
+            $params['start'] = $from;
+        }
+        if ($request->input('to')) {
+            $to = Carbon::parse($request->input('to'))->format('Y-m-d');
+
+            $params['end'] = $to;
+        }
+        if ($request->input('filter')) {
+            $exp = [];
+            foreach ($request->input('filter') as $fl) {
+                $exp[] = 'EXPERIENCE'. strtoupper(str_replace('_', '', $fl));
+            }
+
+            $params['att'] = implode('|', $exp);
+        }
+
         if ($request->input('rating')) {
             $params['ratings'] = implode(',', $request->input('rating'));
         }
@@ -43,7 +64,7 @@ class EventsController extends Controller
 
         $params['size'] = 10;
         $params['pge'] = $request->input('page') ?: 1;
-        $params['fl'] = 'product_id,product_name,product_description,product_image,rate_from,starRating,geo';
+        //$params['fl'] = 'product_id,product_name,product_description,product_image,rate_from,starRating,geo,freeEntry';
         $params['facets'] = 'cla'; // Additionally retrieve number of results in all types
         if (sizeof($order)) $params['order'] = implode(', ', $order);
 
@@ -71,14 +92,14 @@ class EventsController extends Controller
         return view('events.list', compact('events', 'total', 'paginator'));
     }
 
-    public function show(ATLASService $ATLASService, TourService $tourService, $id)
+    public function show(ATLASService $ATLASService, EventService $eventService, $id)
     {
         $model = $ATLASService->getProduct($id);
 
-        $tourService->set($model);
-        $services = $tourService->getServices();
+        $eventService->set($model);
+        $services = $eventService->getServices();
 
-        $coord = $tourService->getCoordinates();
+        $coord = $eventService->getCoordinates();
 
         $nearest = $ATLASService->events([
                 'fl' => 'product_id,product_name,product_description,product_image,geo',
@@ -89,6 +110,6 @@ class EventsController extends Controller
 
         //dd($model);
 
-        return view('events.show', ['model' => $tourService, 'nearest' => $nearest]);
+        return view('events.show', ['model' => $eventService, 'nearest' => $nearest]);
     }
 }

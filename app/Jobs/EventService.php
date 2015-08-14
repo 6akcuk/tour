@@ -26,4 +26,39 @@ class EventService extends ProductService implements SelfHandling
     {
         //
     }
+
+    public function isFree()
+    {
+        return $this->model['freeEntryFlag'] == 1;
+    }
+
+    public function getRateFrom()
+    {
+        $costs = [];
+        foreach ($this->model['entryCosts'] as $cost) {
+            $costs[] = $cost['entryCost'];
+        }
+
+        return sizeof($costs) ? (int) min($costs) : 0;
+    }
+
+    public function getFrequencyId()
+    {
+        return $this->model['attributeIdFrequency'];
+    }
+
+    public function getFrequencyStart()
+    {
+        return $this->model['frequencyStartDate'];
+    }
+
+    public function getFrequencyEnd()
+    {
+        return $this->model['frequencyEndDate'];
+    }
+
+    public function getOpenTimes()
+    {
+        return $this->model['openTimes'];
+    }
 }

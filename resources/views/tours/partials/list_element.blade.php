@@ -11,9 +11,6 @@
         <div class="clearfix visible-xs-block"></div>
         <div class="col-lg-6 col-md-6 col-sm-6">
             <div class="tour_list_desc">
-                <div class="rating">
-                    @include('layouts.partials.rating', ['rating' => $tour['starRating']])
-                </div>
                 <h3>{{ $tour['productName'] }}</h3>
                 <p>
                     {{ substr($tour['productDescription'], 0, 100) .'...' }}

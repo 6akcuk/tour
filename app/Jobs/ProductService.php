@@ -120,18 +120,21 @@ class ProductService extends Job implements SelfHandling
         if (!$this->images) {
             foreach ($this->model['multimedia'] as $mm) {
                 $size = $mm['attributeIdSizeOrientation'];
+                if ($size == 'YOUTUBE') continue; // Right now, no need to add youtube videos.
 
-                $this->images[$mm['altText']][$size] = $mm['serverPath'];
+                $mm['sequenceNumber'] = (int) floor($mm['sequenceNumber'] / 100);
 
-                if ($size == 'LARGELAND' || $size == 'LARGEPORT') $this->images[$mm['altText']]['source'] = $mm['serverPath'];
-                else if (!isset($this->images[$mm['altText']]['source']) && ($size == 'LANDSCAPE' || $size == 'PORTRAIT'))
-                    $this->images[$mm['altText']]['source'] = $mm['serverPath'];
+                $this->images[$mm['sequenceNumber']][$size] = $mm;
+
+                if ($size == 'LARGELAND' || $size == 'LARGEPORT') $this->images[$mm['sequenceNumber']]['source'] = $mm;
+                else if (!isset($this->images[$mm['sequenceNumber']]['source']) && ($size == 'LANDSCAPE' || $size == 'PORTRAIT'))
+                    $this->images[$mm['sequenceNumber']]['source'] = $mm;
 
                 if (in_array($size, ['LARGELAND', 'LARGEPORT']))
-                    $this->images[$mm['altText']]['large'] = $mm['serverPath'];
+                    $this->images[$mm['sequenceNumber']]['large'] = $mm;
 
-                if (in_array($size, ['LANDSCAPE', 'PORTRAIT']))
-                    $this->images[$mm['altText']]['medium'] = $mm['serverPath'];
+                if (!isset($this->images[$mm['sequenceNumber']]['medium']) && in_array($size, ['LANDSCAPE', 'PORTRAIT']))
+                    $this->images[$mm['sequenceNumber']]['medium'] = $mm;
             }
         }
 
@@ -151,10 +154,30 @@ class ProductService extends Job implements SelfHandling
 
         foreach ($images as $image) {
             if (isset($image['XLARGELAND']))
-                return $image['XLARGELAND'];
+                return $image['XLARGELAND']['serverPath'];
+        }
+
+        foreach ($images as $image) {
+            if (isset($image['LARGELAND']))
+                return $image['LARGELAND']['serverPath'];
         }
 
         return null;
+    }
+
+    /**
+     * Does product have telephone number.
+     *
+     * @return bool
+     */
+    public function hasTelephone()
+    {
+        if (in_array('CAPHENQUIR', array_column($this->model['communication'], 'attributeIdCommunication')))
+            return true;
+        elseif (in_array('CABENQUIR', array_column($this->model['communication'], 'attributeIdCommunication')))
+            return true;
+
+        return false;
     }
 
     /**

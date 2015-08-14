@@ -26,4 +26,20 @@ class AttractionService extends ProductService implements SelfHandling
     {
         //
     }
+
+    public function isFree()
+    {
+        return $this->model['freeEntryFlag'] == 1;
+    }
+
+    public function getRateFrom()
+    {
+        $costs = [];
+        foreach ($this->model['entryCosts'] as $cost) {
+            $costs[] = $cost['entryCost'];
+        }
+
+        return sizeof($costs) ? (int) min($costs) : 0;
+    }
+
 }
