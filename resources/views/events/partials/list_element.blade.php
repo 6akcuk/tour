@@ -20,10 +20,6 @@
         <div class="col-lg-2 col-md-2 col-sm-2">
             <div class="price_list">
                 <div>
-                    <sup>$</sup>
-                    {{ (int)$event['rateFrom'] }}*
-                    <span class="normal_price_list"></span>
-                    <small>*From/Per person</small>
                     <p>
                         <a href="{{ route('events.show', explode('$', $event['productId'])[0]) }}" class="btn_1">Details</a>
                     </p>

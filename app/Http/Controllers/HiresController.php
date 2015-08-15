@@ -34,11 +34,8 @@ class HiresController extends Controller
         }
 
         $order = [];
-        if ($request->input('sort_price')) {
-            $order[] = 'rate_from '. ($request->input('sort_price') == 'lower' ? 'asc' : 'desc');
-        }
-        if ($request->input('sort_rating')) {
-            $order[] = 'rating_aaa '. ($request->input('sort_price') == 'lower' ? 'asc' : 'desc');
+        if ($request->input('sort_name')) {
+            $order[] = 'product_name '. ($request->input('sort_name') == 'desc' ? 'desc' : 'asc');
         }
 
         $params['size'] = 10;

@@ -24,11 +24,11 @@
                 <a data-toggle="collapse" href="#collapseFilters" aria-expanded="false" aria-controls="collapseFilters" id="filters_col_bt"><i class="icon_set_1_icon-65"></i>Filters <i class="icon-plus-1 pull-right"></i></a>
                 <div class="collapse" id="collapseFilters">
                     <form action="{{ route('accommodations.index') }}" method="get">
-                    @include('layouts.partials.form_params', ['exclude' => ['rateRange', 'rating']])
+                    @include('layouts.partials.form_params', ['exclude' => ['rateRange', 'rating', 'filter']])
                     <div class="filter_type">
                         <h6>Price</h6>
                         <ul>
-                            @foreach (['10-50', '50-150', '150-300', '300-30000'] as $rr)
+                            @foreach (['0-75', '75-150', '150-225', '225-30000'] as $rr)
                                 <li>
                                     <label>
                                         <input type="checkbox" name="rateRange[]" value="{{ $rr }}" {{ Request::input('rateRange') && in_array($rr, Request::input('rateRange')) ? 'checked' : '' }}>
@@ -46,9 +46,22 @@
                             <li>
                                 <label>
                                     <input type="checkbox" name="rating[]" value="{{ $sr }}" {{ Request::input('rating') && in_array($sr, Request::input('rating')) ? 'checked' : '' }}>
-                                <span class="rating">
-                                    @include('layouts.partials.rating', ['rating' => $sr, 'class' => 'icon_set_1_icon-81'])
-                                </span>
+                                    <span class="rating">
+                                        @include('layouts.partials.rating', ['rating' => $sr, 'class' => 'icon_set_1_icon-81'])
+                                    </span>
+                                </label>
+                            </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    <div class="filter_type">
+                        <h6>Facilities</h6>
+                        <ul>
+                            @foreach (config('tours.accommodation_filters') as $value => $label)
+                            <li>
+                                <label>
+                                    <input type="checkbox" name="filter[]" value="{{ $value }}" {{ Request::input('filter') && in_array($value, Request::input('filter')) ? 'checked' : '' }}>
+                                    {{ $label }}
                                 </label>
                             </li>
                             @endforeach

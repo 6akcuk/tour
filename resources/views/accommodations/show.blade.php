@@ -56,6 +56,7 @@
 
             <hr>
 
+            @if ($model->getServices())
             <div class="row">
                 <div class="col-md-3">
                     <h3>Rooms Types</h3>
@@ -80,7 +81,7 @@
                     @endforeach
                 </div><!-- End col-md-9  -->
             </div><!-- End row  -->
-
+            @endif
         </div>
 
         <aside class="col-md-4">

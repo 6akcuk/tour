@@ -4,9 +4,6 @@
             <a href="{{ route('attractions.show', explode('$', $attraction['productId'])[0]) }}">
                 <img src="{{ $attraction['productImage'] }}" class="img-responsive" alt="">
                 @if ($attraction['starRating'] > 4.5)<div class="ribbon top_rated"></div>@endif
-                <div class="short_info">
-                    {{ $attraction['productClassifications'][0] }}<span class="price"><sup>AUD $</sup>{{ (int)$attraction['rateFrom'] }}</span>
-                </div>
             </a>
         </div>
         <div class="hotel_title">

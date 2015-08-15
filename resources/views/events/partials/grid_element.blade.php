@@ -4,9 +4,6 @@
             <a href="{{ route('events.show', explode('$', $event['productId'])[0]) }}">
                 <img src="{{ $event['productImage'] }}" class="img-responsive" alt="">
                 @if ($event['starRating'] > 4.5)<div class="ribbon top_rated"></div>@endif
-                <div class="short_info">
-                    {{ $event['productClassifications'][0] }}<span class="price"><sup>AUD $</sup>{{ (int)$event['rateFrom'] }}</span>
-                </div>
             </a>
         </div>
         <div class="hotel_title">

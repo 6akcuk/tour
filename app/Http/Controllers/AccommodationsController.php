@@ -31,6 +31,22 @@ class AccommodationsController extends Controller
 
             $params['end'] = $to;
         }
+
+        if ($request->input('filter')) {
+            $fac = [];
+            foreach ($request->input('filter') as $fl) {
+                if (stristr($fl, '|')) {
+                    $arr = explode("|", $fl);
+                    foreach ($arr as $ar) {
+                        $fac[] = 'ENTITYFAC'. strtoupper(str_replace('_', '', $ar));
+                    }
+                }
+                else $fac[] = 'ENTITYFAC'. strtoupper(str_replace('_', '', $fl));
+            }
+
+            $params['att'] = implode('|', $fac);
+        }
+
         if ($request->input('rating')) {
             $params['ratings'] = implode(',', $request->input('rating'));
         }

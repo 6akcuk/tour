@@ -37,6 +37,17 @@ return [
         'SAFARI'        => 'Wilderness Safari Retreat'
     ],
 
+    'accommodation_filters' => [
+        'COTS'                          => 'Cot',
+        'GYM'                           => 'GYM',
+        'POOL|POOLHEATED|POOLINDOOR'    => 'Pool',
+        'BBQ'                           => 'BBQ',
+        'CARPARK'                       => 'Car Park',
+        'INTERNETBB|INTERNETWI'         => 'Internet Access',
+        'LAUNDRY'                       => 'Laundry',
+        'NSMOKESTAB|NSMOKFLOOR'         => 'Non-smoking',
+    ],
+
     'tours_types' => [
         ''          => 'All',
 		'FULLDAY'   => 'Full Day',
@@ -44,6 +55,15 @@ return [
 		'NIGHT'     => 'Night',
 		'EXTENDED'  => 'Extended',
 		'TAILORED'  => 'Tailored'
+    ],
+
+    'tours_filters' => [
+        'ADVENTURE'     => 'Adventure',
+        'BEACH'         => 'Beach',
+        'FLORAFAUNA'    => 'Flora & Fauna',
+        'FOODWINE'      => 'Food & Wine',
+        'HISTORIC'      => 'Historic',
+        'OUTBACK'       => 'Outback'
     ],
     
     'attractions_types' => [

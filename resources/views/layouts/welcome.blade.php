@@ -32,7 +32,7 @@
         <div class="tab-content">
             <div class="tab-pane active" id="accommodations">
                 <form action="{{ route('accommodations.index') }}" method="get">
-                    <h3>Search Accomodation in Australia</h3>
+                    <h3>Search Accommodation in Australia</h3>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -227,8 +227,7 @@
 <div id="accommodations_top" class="container margin_60">
 
     <div class="main_title">
-        <h2>Australia <span>Top</span> Accommodations</h2>
-        <p>Quisque at tortor a libero posuere laoreet vitae sed arcu. Curabitur consequat.</p>
+        <h2><span>Top Rated</span> Accommodation</h2>
     </div>
 
     <div class="row">
@@ -239,15 +238,14 @@
 
     </div><!-- End row -->
     <p class="text-center nopadding">
-        <a href="{{ route('accommodations.index') }}" class="btn_1 medium"><i class="icon-eye-7"></i>View all accommodations ({{ $accommodations['numberOfResults'] }}) </a>
+        <a href="{{ route('accommodations.index') }}" class="btn_1 medium"><i class="icon-eye-7"></i>View all accommodation ({{ $accommodations['numberOfResults'] }}) </a>
     </p>
 </div><!-- End container -->
 
 <div id="tours_top" class="container margin_60" style="display: none">
 
     <div class="main_title">
-        <h2>Australia <span>Top</span> Tours</h2>
-        <p>Quisque at tortor a libero posuere laoreet vitae sed arcu. Curabitur consequat.</p>
+        <h2><span>Top Rated</span> Tours</h2>
     </div>
 
     <div class="row">
@@ -265,8 +263,7 @@
 <div id="attractions_top" class="container margin_60" style="display: none">
 
     <div class="main_title">
-        <h2>Australia <span>Top</span> Attractions</h2>
-        <p>Quisque at tortor a libero posuere laoreet vitae sed arcu. Curabitur consequat.</p>
+        <h2><span>Top Rated</span> Attractions</h2>
     </div>
 
     <div class="row">
@@ -284,8 +281,7 @@
 <div id="events_top" class="container margin_60" style="display: none">
 
     <div class="main_title">
-        <h2>Australia <span>Top</span> Events</h2>
-        <p>Quisque at tortor a libero posuere laoreet vitae sed arcu. Curabitur consequat.</p>
+        <h2><span>Top Rated</span> Events</h2>
     </div>
 
     <div class="row">
@@ -303,8 +299,7 @@
 <div id="hires_top" class="container margin_60" style="display: none">
 
     <div class="main_title">
-        <h2>Australia <span>Top</span> Hires</h2>
-        <p>Quisque at tortor a libero posuere laoreet vitae sed arcu. Curabitur consequat.</p>
+        <h2><span>Top Rated</span> Hires</h2>
     </div>
 
     <div class="row">

@@ -31,6 +31,22 @@ class ToursController extends Controller
 
             $params['end'] = $to;
         }
+
+        if ($request->input('filter')) {
+            $exp = [];
+            foreach ($request->input('filter') as $fl) {
+                if (stristr($fl, '|')) {
+                    $arr = explode("|", $fl);
+                    foreach ($arr as $ar) {
+                        $exp[] = 'EXPERIENCE'. strtoupper(str_replace('_', '', $ar));
+                    }
+                }
+                else $exp[] = 'EXPERIENCE'. strtoupper(str_replace('_', '', $fl));
+            }
+
+            $params['att'] = implode('|', $exp);
+        }
+
         if ($request->input('rating')) {
             $params['ratings'] = implode(',', $request->input('rating'));
         }
@@ -48,8 +64,8 @@ class ToursController extends Controller
         if ($request->input('sort_price')) {
             $order[] = 'rate_from '. ($request->input('sort_price') == 'lower' ? 'asc' : 'desc');
         }
-        if ($request->input('sort_rating')) {
-            $order[] = 'rating_aaa '. ($request->input('sort_price') == 'lower' ? 'asc' : 'desc');
+        if ($request->input('sort_name')) {
+            $order[] = 'product_name '. ($request->input('sort_name') == 'desc' ? 'desc' : 'asc');
         }
 
         $params['size'] = 10;

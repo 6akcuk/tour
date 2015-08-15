@@ -10,28 +10,16 @@
             <div class="col-md-3 col-sm-3 col-xs-6">
                 <div class="styled-select-filters">
                     <form action="{{ route('hires.index', Request::all()) }}" method="get">
-                    @include('layouts.partials.form_params', ['exclude' => ['sort_price']])
-                    {!! Form::select('sort_price', [
-                        '' => 'Sort by price',
-                        'lower' => 'Lowest price',
-                        'higher' => 'Highest price'
-                    ], Request::input('sort_price'), ['id' => 'sort_price']) !!}
+                    @include('layouts.partials.form_params', ['exclude' => ['sort_name']])
+                    {!! Form::select('sort_name', [
+                        '' => 'Sort by name',
+                        'asc' => 'Name (A-Z)',
+                        'desc' => 'Name (Z-A)'
+                    ], Request::input('sort_name'), ['id' => 'sort_name']) !!}
                     </form>
                 </div>
             </div>
-            <div class="col-md-3 col-sm-3 col-xs-6">
-                <div class="styled-select-filters">
-                    <form action="{{ route('hires.index', Request::all()) }}" method="get">
-                    @include('layouts.partials.form_params', ['exclude' => ['sort_rating']])
-                    {!! Form::select('sort_rating', [
-                        '' => 'Sort by ranking',
-                        'lower' => 'Lowest ranking',
-                        'higher' => 'Highest ranking'
-                    ], Request::input('sort_rating'), ['id' => 'sort_rating']) !!}
-                    </form>
-                </div>
-            </div>
-            <div class="col-md-6 col-sm-6 hidden-xs text-right">
+            <div class="col-md-9 col-sm-9 hidden-xs text-right">
                 <a class="bt_filters" href="{{ route('hires.index', array_merge(Request::all(), ['grid' => 1])) }}">
                     <i class="icon-th"></i></a>
                 <a class="bt_filters" href="{{ route('hires.index', array_merge(Request::all(), ['grid' => 0])) }}">

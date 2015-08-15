@@ -1,3 +1,5 @@
+<script src="js/sort_product.js"></script>
+
 <!-- Slider -->
 <script src="js/jquery.sliderPro.min.js"></script>
 <script type="text/javascript">
