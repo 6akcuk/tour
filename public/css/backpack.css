@@ -2,6 +2,12 @@
   padding-top: 2px;
 }
 
+@media screen and (max-width: 991px) {
+  footer #logo .logo_sticky {
+    height: 28px;
+  }
+}
+
 #search_container {
   background-image: url('../img/bg.jpg');
   height: 600px;

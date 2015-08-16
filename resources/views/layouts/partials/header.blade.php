@@ -20,15 +20,17 @@
     <link rel="apple-touch-icon" type="image/x-icon" sizes="144x144" href="img/apple-touch-icon-144x144-precomposed.png">
 
     <!-- CSS -->
-    <link href="css/base.css" rel="stylesheet">
+    <!--<link href="css/base.css" rel="stylesheet">
 
     <!-- SPECIFIC CSS -->
-    <link href="css/skins/square/grey.css" rel="stylesheet">
+    <!--<link href="css/skins/square/grey.css" rel="stylesheet">
     <link href="css/date_time_picker.css" rel="stylesheet">
     <link href="css/blog.css" rel="stylesheet">
 
     <!-- Site CSS -->
-    <link href="css/backpack.css" rel="stylesheet">
+    <!--<link href="css/backpack.css" rel="stylesheet">-->
+
+    <link href="css/all.css" rel="stylesheet">
 
     <!-- Google web fonts -->
     <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>

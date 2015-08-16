@@ -18,7 +18,7 @@
                         <img src="img/logo_sticky.png" width="160" height="34" alt="City tours" data-retina="true">
                     </div>
                     <a href="#" class="open_close" id="close_in"><i class="icon_set_1_icon-77"></i></a>
-                    <ul>
+                    <ul class="pull-right">
                         <li>
                             <a href="{{ route('accommodations.index') }}" class="show-submenu">Accommodation</a>
                         </li>
