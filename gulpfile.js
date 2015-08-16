@@ -14,7 +14,6 @@ var elixir = require('laravel-elixir');
 elixir(function(mix) {
     //mix.sass('app.scss');
     mix.styles([
-        'base.css',
         'bootstrap.css',
         'animate.min.css',
         'style.css',
@@ -24,6 +23,7 @@ elixir(function(mix) {
         'fontello/css/icon_set_2.css',
         'fontello/css/fontello.css',
         'magnific-popup.css',
+
         'color-backpack.css',
         'skins/square/grey.css',
         'date_time_picker.css',
