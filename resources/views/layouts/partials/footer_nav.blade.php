@@ -18,7 +18,7 @@
             <div class="col-md-3 col-sm-2">
                 <h3>Discover</h3>
                 <ul>
-                    <li><a href="{{ route('accommodations.index') }}">Accommodation</a></li>
+                    <li><a href="{{ route('accommodation.index') }}">Accommodation</a></li>
                     <li><a href="{{ route('tours.index') }}">Tours</a></li>
                     <li><a href="{{ route('attractions.index') }}">Attractions</a></li>
                     <li><a href="{{ route('events.index') }}">Events</a></li>

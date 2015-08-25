@@ -12,6 +12,10 @@
 */
 
 Route::get('/', 'IndexController@welcome');
+Route::get('/index/tours', 'IndexController@tours');
+Route::get('/index/attractions', 'IndexController@attractions');
+Route::get('/index/events', 'IndexController@events');
+Route::get('/index/hires', 'IndexController@hires');
 
 Route::group(['prefix' => 'admin'], function() {
     Route::get('auth/login', 'Auth\AuthController@getLogin');
@@ -35,8 +39,8 @@ Route::group(['namespace' => 'Blogs'], function() {
     Route::get('blogs/tag/{tag_name}', ['uses' => 'PostsController@tag', 'as' => 'blogs.tag']);
 });
 
-Route::get('accommodation', ['uses' => 'AccommodationsController@index', 'as' => 'accommodations.index']);
-Route::get('accommodation/show/{id}', ['uses' => 'AccommodationsController@show', 'as' => 'accommodations.show']);
+Route::get('accommodation', ['uses' => 'AccommodationsController@index', 'as' => 'accommodation.index']);
+Route::get('accommodation/show/{id}', ['uses' => 'AccommodationsController@show', 'as' => 'accommodation.show']);
 
 Route::get('tours', ['uses' => 'ToursController@index', 'as' => 'tours.index']);
 Route::get('tours/show/{id}', ['uses' => 'ToursController@show', 'as' => 'tours.show']);
@@ -50,3 +54,5 @@ Route::get('events/show/{id}', ['uses' => 'EventsController@show', 'as' => 'even
 Route::get('hires', ['uses' => 'HiresController@index', 'as' => 'hires.index']);
 Route::get('hires/show/{id}', ['uses' => 'HiresController@show', 'as' => 'hires.show']);
 
+Route::post('booking/{type}/{shortname}', ['uses' => 'BookingController@quote', 'as' => 'booking.quote']);
+Route::post('booking/make', ['uses' => 'BookingController@make', 'as' => 'booking.make']);

@@ -125,14 +125,7 @@
                 <a class="btn_full" href="cart_hotel.html">Check now</a>
             </div><!--/box_style_1 -->
 
-            <div class="box_style_4">
-                <i class="icon_set_1_icon-90"></i>
-                <h4><span>Book</span> by phone</h4>
-                <a href="tel://{{ str_replace(' ', '', $model->getTelephone()) }}" class="phone">
-                    +{{ $model->getTelephone() }}
-                </a>
-                <small>Monday to Friday 9.00am - 7.30pm</small>
-            </div>
+            @include('layouts.partials.book_phone')
 
         </aside>
     </div>

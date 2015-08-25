@@ -31,7 +31,7 @@
 
         <div class="tab-content">
             <div class="tab-pane active" id="accommodations">
-                <form action="{{ route('accommodations.index') }}" method="get">
+                <form action="{{ route('accommodation.index') }}" method="get">
                     <h3>Search Accommodation in Australia</h3>
                     <div class="row">
                         <div class="col-md-6">
@@ -248,15 +248,17 @@
         <h2><span>Top Rated</span> Tours</h2>
     </div>
 
-    <div class="row">
-
-        @foreach ($tours['products'] as $tour)
-            @include('tours.partials.grid_element', ['columns' => 3])
-        @endforeach
-
+    <div class="row" style="position: relative; min-height: 100px">
+        <div class="sk-spinner sk-spinner-wave">
+            <div class="sk-rect1"></div>
+            <div class="sk-rect2"></div>
+            <div class="sk-rect3"></div>
+            <div class="sk-rect4"></div>
+            <div class="sk-rect5"></div>
+        </div>
     </div><!-- End row -->
     <p class="text-center nopadding">
-        <a href="{{ route('tours.index') }}" class="btn_1 medium"><i class="icon-eye-7"></i>View all tours ({{ $tours['numberOfResults'] }}) </a>
+        <a href="{{ route('tours.index') }}" class="btn_1 medium"><i class="icon-eye-7"></i>View all tours (<span id="tours_num"></span>) </a>
     </p>
 </div><!-- End container -->
 
@@ -266,15 +268,17 @@
         <h2><span>Top Rated</span> Attractions</h2>
     </div>
 
-    <div class="row">
-
-        @foreach ($attractions['products'] as $attraction)
-            @include('attractions.partials.grid_element', ['columns' => 3])
-        @endforeach
-
+    <div class="row" style="position: relative; min-height: 100px">
+        <div class="sk-spinner sk-spinner-wave">
+            <div class="sk-rect1"></div>
+            <div class="sk-rect2"></div>
+            <div class="sk-rect3"></div>
+            <div class="sk-rect4"></div>
+            <div class="sk-rect5"></div>
+        </div>
     </div><!-- End row -->
     <p class="text-center nopadding">
-        <a href="{{ route('attractions.index') }}" class="btn_1 medium"><i class="icon-eye-7"></i>View all attractions ({{ $attractions['numberOfResults'] }}) </a>
+        <a href="{{ route('attractions.index') }}" class="btn_1 medium"><i class="icon-eye-7"></i>View all attractions (<span id="attractions_num"></span>) </a>
     </p>
 </div><!-- End container -->
 
@@ -284,15 +288,17 @@
         <h2><span>Top Rated</span> Events</h2>
     </div>
 
-    <div class="row">
-
-        @foreach ($events['products'] as $event)
-            @include('events.partials.grid_element', ['columns' => 3])
-        @endforeach
-
+    <div class="row" style="position: relative; min-height: 100px">
+        <div class="sk-spinner sk-spinner-wave">
+            <div class="sk-rect1"></div>
+            <div class="sk-rect2"></div>
+            <div class="sk-rect3"></div>
+            <div class="sk-rect4"></div>
+            <div class="sk-rect5"></div>
+        </div>
     </div><!-- End row -->
     <p class="text-center nopadding">
-        <a href="{{ route('events.index') }}" class="btn_1 medium"><i class="icon-eye-7"></i>View all events ({{ $events['numberOfResults'] }}) </a>
+        <a href="{{ route('events.index') }}" class="btn_1 medium"><i class="icon-eye-7"></i>View all events (<span id="events_num"></span>) </a>
     </p>
 </div><!-- End container -->
 
@@ -302,15 +308,17 @@
         <h2><span>Top Rated</span> Hires</h2>
     </div>
 
-    <div class="row">
-
-        @foreach ($hires['products'] as $hire)
-            @include('hires.partials.grid_element', ['columns' => 3])
-        @endforeach
-
+    <div class="row" style="position: relative; min-height: 100px">
+        <div class="sk-spinner sk-spinner-wave">
+            <div class="sk-rect1"></div>
+            <div class="sk-rect2"></div>
+            <div class="sk-rect3"></div>
+            <div class="sk-rect4"></div>
+            <div class="sk-rect5"></div>
+        </div>
     </div><!-- End row -->
     <p class="text-center nopadding">
-        <a href="{{ route('hires.index') }}" class="btn_1 medium"><i class="icon-eye-7"></i>View all hires ({{ $hires['numberOfResults'] }}) </a>
+        <a href="{{ route('hires.index') }}" class="btn_1 medium"><i class="icon-eye-7"></i>View all hires (<span id="hires_num"></span>) </a>
     </p>
 </div><!-- End container -->
 

@@ -25,7 +25,6 @@ elixir(function(mix) {
         'magnific-popup.css',
 
         'color-backpack.css',
-        'skins/square/grey.css',
         'date_time_picker.css',
         'blog.css',
         'backpack.css'

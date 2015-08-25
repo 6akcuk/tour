@@ -32,8 +32,9 @@ class AccommodationsController extends Controller
             $params['end'] = $to;
         }
 
+        $fac = ['ESC_TXA_DEFAULT', 'ESC_TXA_MULTI'];
+
         if ($request->input('filter')) {
-            $fac = [];
             foreach ($request->input('filter') as $fl) {
                 if (stristr($fl, '|')) {
                     $arr = explode("|", $fl);
@@ -43,9 +44,9 @@ class AccommodationsController extends Controller
                 }
                 else $fac[] = 'ENTITYFAC'. strtoupper(str_replace('_', '', $fl));
             }
-
-            $params['att'] = implode('|', $fac);
         }
+
+        $params['att'] = implode('|', $fac);
 
         if ($request->input('rating')) {
             $params['ratings'] = implode(',', $request->input('rating'));
@@ -110,6 +111,7 @@ class AccommodationsController extends Controller
         $nearest = $ATLASService->accommodations([
             'fl' => 'product_id,product_name,product_description,product_image,geo',
             'latlong' => $coord['lat'] .','. $coord['long'],
+            'att' => 'ESC_TXA_MULTI|ESC_TXA_DEFAULT',
             'dist' => 50,
             'size' => 20
         ]);

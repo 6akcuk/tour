@@ -260,4 +260,18 @@ class ProductService extends Job implements SelfHandling
 
         return $this->services;
     }
+
+    public function getTXAShortName()
+    {
+        $name = null;
+
+        foreach ($this->model['externalSystems'] as $system) {
+            if (in_array($system['externalSystemCode'], ['TXA_DEFAULT', 'TXA_MULTI'])) {
+                $name = $system['externalSystemText'];
+                break;
+            }
+        }
+
+        return $name;
+    }
 }

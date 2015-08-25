@@ -24,7 +24,7 @@
 @endsection
 
 @section('breadcrumbs')
-    <li><a href="{{ route('accommodations.index') }}">Accommodations</a></li>
+    <li><a href="{{ route('accommodation.index') }}">Accommodations</a></li>
     <li>{{ $model->getName() }}</li>
 @endsection
 
@@ -88,53 +88,10 @@
             <p class="hidden-sm hidden-xs">
                 <a class="btn_map" data-toggle="collapse" href="#collapseMap" aria-expanded="false" aria-controls="collapseMap">View on map</a>
             </p>
-            <div class="box_style_1 expose">
-                <h3 class="inner">Check Availability</h3>
-                <div class="row">
-                    <div class="col-md-6 col-sm-6">
-                        <div class="form-group">
-                            <label><i class="icon-calendar-7"></i> Check in</label>
-                            <input class="date-pick form-control" data-date-format="M d, D" type="text">
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-sm-6">
-                        <div class="form-group">
-                            <label><i class="icon-calendar-7"></i> Check out</label>
-                            <input class="date-pick form-control" data-date-format="M d, D" type="text">
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 col-sm-6">
-                        <div class="form-group">
-                            <label>Adults</label>
-                            <div class="numbers-row">
-                                <input type="text" value="1" id="adults" class="qty2 form-control" name="quantity">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-sm-6">
-                        <div class="form-group">
-                            <label>Children</label>
-                            <div class="numbers-row">
-                                <input type="text" value="0" id="children" class="qty2 form-control" name="quantity">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <br>
 
-                <a class="btn_full" href="cart_hotel.html">Check now</a>
-            </div><!--/box_style_1 -->
+            @include('layouts.partials.book_form', ['type' => 'accommodation'])
 
-            <div class="box_style_4">
-                <i class="icon_set_1_icon-90"></i>
-                <h4><span>Book</span> by phone</h4>
-                <a href="tel://{{ str_replace(' ', '', $model->getTelephone()) }}" class="phone">
-                    +{{ $model->getTelephone() }}
-                </a>
-                <small>Monday to Friday 9.00am - 7.30pm</small>
-            </div>
+            @include('layouts.partials.book_phone')
 
         </aside>
     </div>
@@ -155,6 +112,6 @@
         'long' => $coord['long'],
         'marker' => 'Single_hotel',
         'products' => $nearest['products'],
-        'route' => 'accommodations.show'
+        'route' => 'accommodation.show'
     ])
 @endsection

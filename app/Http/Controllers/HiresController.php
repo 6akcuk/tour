@@ -38,6 +38,9 @@ class HiresController extends Controller
             $order[] = 'product_name '. ($request->input('sort_name') == 'desc' ? 'desc' : 'asc');
         }
 
+        $exp = ['ESC_TXA_DEFAULT', 'ESC_TXA_MULTI'];
+        $params['att'] = implode('|', $exp);
+
         $params['size'] = 10;
         $params['pge'] = $request->input('page') ?: 1;
         $params['fl'] = 'product_id,product_name,product_description,product_image,rate_from,starRating,geo';

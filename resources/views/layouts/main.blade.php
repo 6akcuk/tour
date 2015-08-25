@@ -19,6 +19,7 @@
 
 @include('layouts.partials.nav')
 
+@if (!isset($booking))
 <section class="parallax-window" data-parallax="scroll" data-image-src="@yield('main_bg', 'img/bg.jpg')" data-natural-width="855" data-natural-height="584">
     <div class="parallax-content-1">
         <div class="animated">
@@ -26,6 +27,32 @@
         </div>
     </div>
 </section>
+@else
+<section id="hero_2">
+    <div class="intro_title animated fadeInDown">
+        <h1>Place Your Order</h1>
+        <div class="bs-wizard">
+            <div class="col-xs-4 bs-wizard-step active">
+                <div class="text-center bs-wizard-stepnum">Order</div>
+                <div class="progress"><div class="progress-bar"></div></div>
+                <a href="#" class="bs-wizard-dot"></a>
+            </div>
+
+            <div class="col-xs-4 bs-wizard-step {{ Request::is('booking/make') ? 'active' : 'disabled' }}">
+                <div class="text-center bs-wizard-stepnum">Your details</div>
+                <div class="progress"><div class="progress-bar"></div></div>
+                <a href="payment_hotel.html" class="bs-wizard-dot"></a>
+            </div>
+
+            <div class="col-xs-4 bs-wizard-step disabled">
+                <div class="text-center bs-wizard-stepnum">Finish!</div>
+                <div class="progress"><div class="progress-bar"></div></div>
+                <a href="confirmation_hotel.html" class="bs-wizard-dot"></a>
+            </div>
+        </div>
+    </div>
+</section>
+@endif
 
 <div id="position">
     <div class="container">

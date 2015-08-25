@@ -70,7 +70,7 @@
             'long' => $coord[1],
             'marker' => 'Single_hotel',
             'products' => $accommodations['products'],
-            'route' => 'accommodations.show'
+            'route' => 'accommodation.show'
         ])
     @endif
 @endsection

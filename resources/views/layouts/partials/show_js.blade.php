@@ -1,5 +1,13 @@
 <script src="js/sort_product.js"></script>
 
+<script src="js/icheck.js"></script>
+<script>
+    $('input').iCheck({
+        checkboxClass: 'icheckbox_square-grey',
+        radioClass: 'iradio_square-grey'
+    });
+</script>
+
 <!-- Slider -->
 <script src="js/jquery.sliderPro.min.js"></script>
 <script type="text/javascript">

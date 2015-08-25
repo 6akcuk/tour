@@ -56,9 +56,22 @@
             }
         });
 
+        var loaded = {};
+
         $('a[data-toggle="tab"]').on('show.bs.tab', function (e) {
             $(e.relatedTarget.hash + '_top').hide();
-            $(e.target.hash + '_top').show();
+
+            var $new = $(e.target.hash + '_top');
+            $new.show();
+
+            if (!loaded[e.target.hash]) {
+                $.getJSON('/index/' + e.target.hash.replace(/#/, ''), function (response) {
+                    $new.children('div.row').html(response.view);
+                    $(e.target.hash + '_num').text(response.numberOfResults);
+
+                    loaded[e.target.hash] = true;
+                });
+            }
         })
     </script>
 @endsection

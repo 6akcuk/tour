@@ -5,6 +5,9 @@ return [
     'atlas_host' => 'atlas.atdw.com.au',
     'atlas_key' => '201407151532',
 
+    'obx_account' => 'Test_V3_Offload',
+    'obx_key' => '60E0533B-6E38-4779-A7D7-0D82BF824C55',
+
     'regions' => [
         'All'               => 'All',
         'Adelaide'          => 'Adelaide City',

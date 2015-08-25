@@ -34,14 +34,16 @@ class AttractionsController extends Controller
             $params['minRate'] = min($rates);
             $params['maxRate'] = max($rates);
         }
+
+        $exp = ['ESC_TXA_DEFAULT', 'ESC_TXA_MULTI'];
+
         if ($request->input('filter')) {
-            $exp = [];
             foreach ($request->input('filter') as $fl) {
                 $exp[] = 'EXPERIENCE'. strtoupper(str_replace('_', '', $fl));
             }
-
-            $params['att'] = implode('|', $exp);
         }
+
+        $params['att'] = implode('|', $exp);
 
         $order = [];
         if ($request->input('sort_name')) {

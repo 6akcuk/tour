@@ -34,20 +34,7 @@ class ATLASService extends Job implements SelfHandling
         $query = http_build_query($params);
         $url = 'http://'. config('tours.atlas_host') .'/productsearchservice.svc/'. $service .'?' . $query;
 
-        /*$s = curl_init();
-
-        curl_setopt($s, CURLOPT_URL, 'http://'. config('tours.atdw_host') .'/productsearchservice.svc/'. $service .'?' . $query);
-        curl_setopt($s,CURLOPT_HTTPHEADER, array('Expect:'));
-        curl_setopt($s,CURLOPT_RETURNTRANSFER, true);
-
-        echo (utf8_decode(curl_exec($s)));*/
-
         return (json_decode(iconv('utf-16', 'utf-8', file_get_contents($url)), true));
-        //echo json_decode(substr(file_get_contents($url), -2), true);
-
-        //dd(mb_convert_encoding(file_get_contents('http://'. config('tours.atdw_host') .'/productsearchservice.svc/'. $service .'?' . $query), 'HTML-ENTITIES', 'UTF-8'));
-
-        //return json_encode(html_entity_decode(file_get_contents('http://'. config('tours.atdw_host') .'/productsearchservice.svc/'. $service .'?' . $query)), true);
     }
 
     public function getProduct($id)
@@ -81,6 +68,7 @@ class ATLASService extends Job implements SelfHandling
             'dsc' => 'false',
             'ratings' => '-1,0.5,1,1.5,2,2.5,3,3.5,4,4.5,5',
             'fl' => 'product_id,product_name,product_image,rate_from, product_classifications',
+            'att' => 'ESC_TXA_MULTI|ESC_TXA_DEFAULT',
             'order' => 'rating_aaa desc,rnd'
         ]);
     }
@@ -95,12 +83,13 @@ class ATLASService extends Job implements SelfHandling
     public function topTours()
     {
         return $this->query('products', [
-                'cats' => 'TOUR',
-                'size' => 12,
-                'dsc' => 'false',
-                'ratings' => '-1,0.5,1,1.5,2,2.5,3,3.5,4,4.5,5',
-                'fl' => 'product_id,product_name,product_image,rate_from, product_classifications',
-                'order' => 'rating_aaa desc,rnd'
+            'cats' => 'TOUR',
+            'size' => 12,
+            'dsc' => 'false',
+            'ratings' => '-1,0.5,1,1.5,2,2.5,3,3.5,4,4.5,5',
+            'fl' => 'product_id,product_name,product_image,rate_from, product_classifications',
+            'att' => 'ESC_TXA_MULTI|ESC_TXA_DEFAULT',
+            'order' => 'rating_aaa desc,rnd'
         ]);
     }
 
@@ -114,12 +103,13 @@ class ATLASService extends Job implements SelfHandling
     public function topAttractions()
     {
         return $this->query('products', [
-                'cats' => 'ATTRACTION',
-                'size' => 12,
-                'dsc' => 'false',
-                'ratings' => '-1,0.5,1,1.5,2,2.5,3,3.5,4,4.5,5',
-                'fl' => 'product_id,product_name,product_image,rate_from, product_classifications',
-                'order' => 'rating_aaa desc,rnd'
+            'cats' => 'ATTRACTION',
+            'size' => 12,
+            'dsc' => 'false',
+            'ratings' => '-1,0.5,1,1.5,2,2.5,3,3.5,4,4.5,5',
+            'fl' => 'product_id,product_name,product_image,rate_from, product_classifications',
+            'att' => 'ESC_TXA_MULTI|ESC_TXA_DEFAULT',
+            'order' => 'rating_aaa desc,rnd'
         ]);
     }
 
@@ -133,12 +123,13 @@ class ATLASService extends Job implements SelfHandling
     public function topEvents()
     {
         return $this->query('products', [
-                'cats' => 'EVENT',
-                'size' => 12,
-                'dsc' => 'false',
-                'ratings' => '-1,0.5,1,1.5,2,2.5,3,3.5,4,4.5,5',
-                'fl' => 'product_id,product_name,product_image,rate_from, product_classifications',
-                'order' => 'rating_aaa desc,rnd'
+            'cats' => 'EVENT',
+            'size' => 12,
+            'dsc' => 'false',
+            'ratings' => '-1,0.5,1,1.5,2,2.5,3,3.5,4,4.5,5',
+            'fl' => 'product_id,product_name,product_image,rate_from, product_classifications',
+            'att' => 'ESC_TXA_MULTI|ESC_TXA_DEFAULT',
+            'order' => 'rating_aaa desc,rnd'
         ]);
     }
 
@@ -152,12 +143,13 @@ class ATLASService extends Job implements SelfHandling
     public function topHires()
     {
         return $this->query('products', [
-                'cats' => 'HIRE',
-                'size' => 12,
-                'dsc' => 'false',
-                'ratings' => '-1,0.5,1,1.5,2,2.5,3,3.5,4,4.5,5',
-                'fl' => 'product_id,product_name,product_image,rate_from, product_classifications',
-                'order' => 'rating_aaa desc,rnd'
+            'cats' => 'HIRE',
+            'size' => 12,
+            'dsc' => 'false',
+            'ratings' => '-1,0.5,1,1.5,2,2.5,3,3.5,4,4.5,5',
+            'fl' => 'product_id,product_name,product_image,rate_from, product_classifications',
+            'att' => 'ESC_TXA_MULTI|ESC_TXA_DEFAULT',
+            'order' => 'rating_aaa desc,rnd'
         ]);
     }
 
