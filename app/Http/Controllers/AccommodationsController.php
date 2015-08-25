@@ -89,7 +89,7 @@ class AccommodationsController extends Controller
             $params['size'],
             $params['pge'],
             [
-                'path' => route('accommodations.index'),
+                'path' => route('accommodation.index'),
                 'query' => $request->all()
             ]
         );

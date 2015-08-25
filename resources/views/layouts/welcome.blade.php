@@ -238,7 +238,7 @@
 
     </div><!-- End row -->
     <p class="text-center nopadding">
-        <a href="{{ route('accommodations.index') }}" class="btn_1 medium"><i class="icon-eye-7"></i>View all accommodation ({{ $accommodations['numberOfResults'] }}) </a>
+        <a href="{{ route('accommodation.index') }}" class="btn_1 medium"><i class="icon-eye-7"></i>View all accommodation ({{ $accommodations['numberOfResults'] }}) </a>
     </p>
 </div><!-- End container -->
 

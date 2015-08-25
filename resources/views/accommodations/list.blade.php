@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col-md-3 col-sm-3 col-xs-6">
                 <div class="styled-select-filters">
-                    <form action="{{ route('accommodations.index', Request::all()) }}" method="get">
+                    <form action="{{ route('accommodation.index', Request::all()) }}" method="get">
                     @include('layouts.partials.form_params', ['exclude' => ['sort_price']])
                     {!! Form::select('sort_price', [
                         '' => 'Sort by price',
@@ -21,7 +21,7 @@
             </div>
             <div class="col-md-3 col-sm-3 col-xs-6">
                 <div class="styled-select-filters">
-                    <form action="{{ route('accommodations.index', Request::all()) }}" method="get">
+                    <form action="{{ route('accommodation.index', Request::all()) }}" method="get">
                     @include('layouts.partials.form_params', ['exclude' => ['sort_rating']])
                     {!! Form::select('sort_rating', [
                         '' => 'Sort by ranking',
@@ -32,9 +32,9 @@
                 </div>
             </div>
             <div class="col-md-6 col-sm-6 hidden-xs text-right">
-                <a class="bt_filters" href="{{ route('accommodations.index', array_merge(Request::all(), ['grid' => 1])) }}">
+                <a class="bt_filters" href="{{ route('accommodation.index', array_merge(Request::all(), ['grid' => 1])) }}">
                     <i class="icon-th"></i></a>
-                <a class="bt_filters" href="{{ route('accommodations.index', array_merge(Request::all(), ['grid' => 0])) }}">
+                <a class="bt_filters" href="{{ route('accommodation.index', array_merge(Request::all(), ['grid' => 0])) }}">
                     <i class="icon-list"></i>
                 </a>
             </div>
