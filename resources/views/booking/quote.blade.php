@@ -25,11 +25,11 @@
             <div id="quote-form" class="col-md-8">
                 <div class="alert alert-info" role="alert">
                     <strong>Rooms available</strong> for the selected dates.
-                    <br>PLEASE SELECT YOUR QUANTITY.
+                    <br>PLEASE SELECT YOUR ROOM.
                 </div>
 
                 <div class="alert alert-warning" role="alert" style="display: none">
-                    Select your quantity.
+                    Please select room.
                 </div>
 
                 <table class="table table-striped cart-list add_bottom_30">
@@ -70,8 +70,11 @@
                     </tr>
                     </thead>
                     <tbody>
+                    <tr>
+                        <td colspan="2" class="text-center">- Select room first -</td>
+                    </tr>
                     @foreach ($quote->ProviderRS->BookingExtraOptions->BookingExtraOption as $option)
-                        <tr>
+                        <!--<tr>
                             <td>
                                 {{ $option->name }}
                                 <strong>
@@ -94,13 +97,31 @@
                                     <a></a>
                                 </label>
                             </td>
-                        </tr>
+                        </tr>-->
                     @endforeach
                     </tbody>
                 </table>
 
+                <table class="table table-striped cart-list">
+                    <thead>
+                    <tr>
+                        <th>Selected Nights</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <input type="text" class="form-control" name="selectedDates">
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
                 <small>* Prices for person.</small> <br>
-                <small>** Prices for night.</small>
+                <small>** Prices for night.</small> <br>
+                <small>*** Prices for person and for night.</small> <br>
+                <small>**** Prices for person and for selected night.</small> <br>
+                <small>***** Prices for selected night.</small>
             </div>
 
             <div id="info-form" class="col-md-8" style="display: none">
@@ -394,18 +415,12 @@
 
         function checkForm() {
             if (state == 'quote') {
-                var choosed = false;
-                $('input.qty2').each(function() {
-                    if (parseInt($(this).val()) > 0)
-                        choosed = true;
-                });
 
-                if (choosed) {
+                if ($('input[name="room"]:checked').length) {
                     state = 'info';
                     $('#quote-form, #details-btn').hide();
                     $('#info-form').slideDown();
                 } else {
-                    $('input.qty2').first().focus();
                     $('.alert-warning').show();
                 }
 
@@ -420,11 +435,73 @@
             return true;
         }
 
+        function optionChanged(el) {
+            var oid = $(el).attr('id').replace(/option_/, '');
+
+            $('#' + oid).remove();
+
+            if (!$(el).is(':checked')) {
+
+            } else {
+                var option = null;
+                $.each(options, function (i, _option) {
+                    if (_option.id == oid) option = _option;
+                });
+
+                var price = 0;
+                var selectedNights = $('input[name="selectedDates"]').val() != '' ? $('input[name="selectedDates"]').val().split(',').length : 0;
+
+                if (option.OccupancyCharge) {
+                    var op = option.FlatCharge;
+
+                    if (op.type == 'Once_Off')
+                        price += parseFloat(option.OccupancyCharge.per_adult_price) * adults +
+                                 parseFloat(option.OccupancyCharge.per_child_price) * childs;
+                    else if (op.type == 'Per_Night')
+                        price += (parseFloat(option.OccupancyCharge.per_adult_price) * adults +
+                                 parseFloat(option.OccupancyCharge.per_child_price) * childs) * nights;
+                    else if (op.type == 'Per_Selected_Night')
+                        price += (parseFloat(option.OccupancyCharge.per_adult_price) * adults +
+                                parseFloat(option.OccupancyCharge.per_child_price) * childs) * selectedNights;
+                }
+                else if (option.FlatCharge) {
+                    var op = option.FlatCharge;
+
+                    if (op.type == 'Once_Off')
+                        price += parseFloat(op.price);
+                    else if (op.type == 'Per_Night')
+                        price += parseFloat(op.price) * nights;
+                    else if (op.type == 'Per_Selected_Night')
+                        price += parseFloat(op.price) * selectedNights;
+                }
+                else if (option.UnitCharge) {
+                    var op = option.UnitCharge;
+
+                    if (op.type == 'Once_Off')
+                        price += parseFloat(op.per_unit_price);
+                    else if (op.type == 'Per_Night')
+                        price += parseFloat(op.per_unit_price) * nights;
+                    else if (op.type == 'Per_Selected_Night')
+                        price += parseFloat(op.per_unit_price) * selectedNights;
+                }
+
+                $('<tr id="' + oid + '" price="' + price + '"><td>' + option.name + '</td><td class="text-right">$' + price + '</td></tr>')
+                        .insertBefore('tr.total');
+            }
+
+            mathPrice();
+        }
+
         $(document).ready(function() {
-            $('div.button_inc').on('click', function () {
-                var $input = $(this).parent().find('input');
-                var pid = $input.attr('name').replace(/quantity\[(.*)\]\[.*\]/, '$1');
-                var value = $input.val();
+            $('input[name="selectedDates"]').datepicker({
+                multidate: true,
+                autoclose: false
+            }).on('changeDate', function() {
+                $('input[name*="option"]:checked').change();
+            });
+
+            $('input[name="room"]').change(function() {
+                var pid = $(this).val();
 
                 $('#'+ pid).remove();
 
@@ -433,50 +510,91 @@
                     if (_room.id == pid) room = _room;
                 });
 
-                $('<div id="'+ pid +'" price="'+ (room.Quotes.Quote.price * value) +'">'+ value + ' '+ room.name + '</div>').appendTo($('#rooms'));
+                //$('<div id="'+ pid +'" price="'+ (room.Quotes.Quote.price) +'">1 '+ room.name + '</div>').appendTo($('#rooms'));
+                $('#rooms').attr('price', room.Quotes.Quote.price).text('1 '+ room.name);
+
+                var options_html = [];
+
+                if (room.Quotes.Quote.BookingExtras) {
+                    $.each(room.Quotes.Quote.BookingExtras.BookingExtra, function (i, extra) {
+                        $.each(options, function (j, option) {
+                            if (option.id == extra.booking_extra_option_id) {
+                                var priceText = '+$';
+
+                                if (option.OccupancyCharge) {
+                                    var op = option.OccupancyCharge;
+
+                                    priceText += op.per_adult_price;
+
+                                    if (op.type == 'Once_Off') {
+                                        priceText += '*';
+                                    }
+                                    else if (op.type == 'Per_Night') {
+                                        priceText += '***';
+                                    }
+                                    else if (op.type == 'Per_Selected_Night') {
+                                        priceText += '****';
+                                    }
+                                }
+                                else if (option.FlatCharge) {
+                                    var op = option.FlatCharge;
+
+                                    priceText += op.price;
+
+                                    if (op.type == 'Once_Off') {
+                                    }
+                                    else if (op.type == 'Per_Night') {
+                                        priceText += '**';
+                                    }
+                                    else if (op.type == 'Per_Selected_Night') {
+                                        priceText += '*****';
+                                    }
+                                }
+                                else if (option.UnitCharge) {
+                                    var op = option.UnitCharge;
+
+                                    priceText += op.per_unit_price;
+
+                                    if (op.type == 'Per_Night') {
+                                        priceText += '**';
+                                    }
+                                    else if (op.type == 'Per_Selected_Night') {
+                                        priceText += '*****';
+                                    }
+                                }
+
+                                options_html.push('\
+                        <tr>\
+                            <td>\
+                                ' + option.name + '\
+                                <strong>\
+                                '+ priceText + '\
+                                </strong>\
+                            </td>\
+                            <td>\
+                                <label class="switch-light switch-ios pull-right">\
+                                    <input type="checkbox" name="option[' + option.id + ']" id="option_' + option.id + '" onchange="optionChanged(this)" value="1">\
+                                    <span>\
+                                    <span>No</span>\
+                                    <span>Yes</span>\
+                                    </span>\
+                                    <a></a>\
+                                </label>\
+                            </td>\
+                        </tr>');
+
+                            }
+                        });
+                    });
+                } else options_html.push('<tr><td class="text-center" colspan="2">No available booking extras founded.</td></tr>');
+
+                $('table.options_cart tbody').html(options_html.join(''));
 
                 mathPrice();
             });
 
             $('input[type="checkbox"]').change(function() {
-                var oid = $(this).attr('id').replace(/option_/, '');
 
-                if (!$(this).is(':checked')) {
-                    $('#' + oid).remove();
-                } else {
-                    var option = null;
-                    $.each(options, function (i, _option) {
-                        if (_option.id == oid) option = _option;
-                    });
-
-                    var price = 0;
-
-                    if (option.OccupancyCharge) {
-                        price += parseFloat(option.OccupancyCharge.per_adult_price) * adults +
-                                parseFloat(option.OccupancyCharge.per_child_price) * childs;
-                    }
-                    else if (option.FlatCharge) {
-                        var op = option.FlatCharge;
-
-                        if (op.type == 'Once_Off')
-                            price += parseFloat(op.price);
-                        else if (op.type == 'Per_Selected_Night' || op.type == 'Per_Night')
-                            price += parseFloat(op.price) * nights;
-                    }
-                    else if (option.UnitCharge) {
-                        var op = option.UnitCharge;
-
-                        if (op.type == 'Once_Off')
-                            price += parseFloat(op.per_unit_price);
-                        else if (op.type == 'Per_Night' || op.type == 'Per_Selected_Night')
-                            price += parseFloat(op.per_unit_price) * nights;
-                    }
-
-                    $('<tr id="' + oid + '" price="' + price + '"><td>' + option.name + '</td><td class="text-right">$' + price + '</td></tr>')
-                            .insertBefore('tr.total');
-                }
-
-                mathPrice();
             });
         });
     </script>
