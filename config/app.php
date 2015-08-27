@@ -200,6 +200,7 @@ return [
         'Form'      => Illuminate\Html\FormFacade::class,
         'Html'      => Illuminate\Html\HtmlFacade::class,
         'Flash'     => Laracasts\Flash\Flash::class,
+        'Uuid'      => Webpatser\Uuid\Uuid::class,
 
         'BHtml'     => App\Helpers\Backpack\BHtmlFacade::class
 

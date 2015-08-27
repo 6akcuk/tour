@@ -19,8 +19,10 @@ class BookingController extends Controller
         return view('booking.quote', compact('quote', 'shortName', 'type'));
     }
 
-    public function make(Request $request)
+    public function make(Request $request, OBXService $OBXService)
     {
+        dd($OBXService->makeBook($request->all()));
+
         return view('booking.make');
     }
 }
