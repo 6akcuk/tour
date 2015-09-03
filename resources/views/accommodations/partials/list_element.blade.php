@@ -30,6 +30,12 @@
                     <p>
                         <a href="{{ route('accommodation.show', explode('$', $acc['productId'])[0]) }}" class="btn_1">Details</a>
                     </p>
+                    @if ($acc['optin'])
+                        <p class="booking-available">
+                            Available <br>
+                            <small>for booking</small>
+                        </p>
+                    @endif
                 </div>
             </div>
         </div>

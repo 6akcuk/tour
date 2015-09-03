@@ -10,11 +10,13 @@
 
 @section('content')
     <div class="row">
-        @if (isset($quote->ProviderRS))
+        @if (isset($quote->ProviderRS) && isset($quote->ProviderRS->id))
             {!! Form::open(['route' => 'booking.make', 'id' => 'book-form', 'onsubmit' => 'return checkForm()']) !!}
             {!! Form::hidden('product_id', $quote->ProviderRS->id) !!}
             {!! Form::hidden('type', $type) !!}
             {!! Form::hidden('short_name', $shortName) !!}
+            {!! Form::hidden('provider_name', Request::input('provider_name')) !!}
+            {!! Form::hidden('contact_phone', Request::input('contact_phone')) !!}
 
             {!! Form::hidden('check_in', \Carbon\Carbon::parse(Request::input('check_in'))->format('Y-m-d')) !!}
             {!! Form::hidden('check_out', \Carbon\Carbon::parse(Request::input('check_out'))->format('Y-m-d')) !!}
@@ -24,27 +26,48 @@
 
             <div id="quote-form" class="col-md-8">
                 <div class="alert alert-info" role="alert">
+                    @if ($type == 'accommodation')
                     <strong>Rooms available</strong> for the selected dates.
                     <br>PLEASE SELECT YOUR ROOM.
+                    @elseif ($type == 'tours')
+                    <strong>Tours available</strong> for the selected dates.
+                    <br>PLEASE SELECT TOUR.
+                    @endif
                 </div>
 
                 <div class="alert alert-warning" role="alert" style="display: none">
+                    @if ($type == 'accommodation')
                     Please select room.
+                    @elseif ($type == 'tours')
+                    Please select tour.
+                    @endif
                 </div>
 
                 <table class="table table-striped cart-list add_bottom_30">
                     <thead>
                     <tr>
                         <th>Choose One</th>
-                        <th>Room Type</th>
-                        <th>Per night</th>
+                        <th>
+                            @if ($type == 'accommodation')
+                            Room Type
+                            @elseif ($type == 'tours')
+                            Tour
+                            @endif
+                        </th>
+                        <th>
+                            @if ($type == 'accommodation')
+                            Per night
+                            @else
+                            Price
+                            @endif
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
                     @foreach ($quote->ProviderRS->ProductGroups->ProductGroups->Products->Product as $product)
                     <tr>
                         <td>
-                            <input id="room_{{ $product->id }}" type="radio" name="room" value="{{ $product->id }}">
+                            <input id="room_{{ $product->id }}" type="radio" name="room" value="{{ $product->id }}" @if (!isset($product->Quotes->Quote)) disabled @endif>
                         </td>
                         <td>
                             <span class="item-cart">
@@ -54,13 +77,18 @@
                             </span>
                         </td>
                         <td>
-                            <strong>AUD ${{ round($product->Quotes->Quote->price / $product->Quotes->Quote->nights, 2) }}</strong>
+                            @if (isset($product->Quotes->Quote))
+                            <strong>AUD ${{ $type == 'accommodation' ? round($product->Quotes->Quote->price / $product->Quotes->Quote->nights, 2) : $product->Quotes->Quote->price }}</strong>
+                            @else
+                                Not Available
+                            @endif
                         </td>
                     </tr>
                     @endforeach
                     </tbody>
                 </table>
 
+                @if ($type == 'accommodation')
                 <table class="table table-striped options_cart">
                     <thead>
                     <tr>
@@ -122,6 +150,7 @@
                 <small>*** Prices for person and for night.</small> <br>
                 <small>**** Prices for person and for selected night.</small> <br>
                 <small>***** Prices for selected night.</small>
+                @endif
             </div>
 
             <div id="info-form" class="col-md-8" style="display: none">
@@ -321,7 +350,9 @@
                         </tr>
                         <tr>
                             <td>
-                                Rooms
+                                @if ($type == 'accommodation') Rooms
+                                @elseif ($type == 'tours') Tour
+                                @endif
                             </td>
                             <td id="rooms" class="text-right"></td>
                         </tr>
@@ -366,17 +397,33 @@
                 <div class="box_style_4">
                     <i class="icon_set_1_icon-57"></i>
                     <h4>Need <span>Help?</span></h4>
-                    <a href="tel://004542344599" class="phone">+45 423 445 99</a>
+                    <a href="tel://{{ str_replace(' ', '', Request::input('contact_phone')) }}" class="phone">
+                        +{{ Request::input('contact_phone') }}
+                    </a>
                     <small>Monday to Friday 9.00am - 7.30pm</small>
                 </div>
             </aside><!-- End aside -->
             {!! Form::close() !!}
         @else
+            @if (isset($quote->Status->Errors))
             <div class="alert alert-danger">
                 {{ $quote->Status->Errors->Error->Message }}
                 <br>
                 <a href="{{ route($type .'.show', Request::input('id')) }}">Go Back</a>
             </div>
+            @elseif (isset($quote->Status->Warnings))
+            <div class="alert alert-warning">
+                {{ $quote->Status->Warnings->Warning->Message }}
+                <br>
+                <a href="{{ route($type .'.show', Request::input('id')) }}">Go Back</a>
+            </div>
+            @else
+            <div class="alert alert-info">
+                Nothing founded. Please, set another parameters.
+                <br>
+                <a href="{{ route($type .'.show', Request::input('id')) }}">Go Back</a>
+            </div>
+            @endif
         @endif
     </div>
 @endsection
@@ -386,7 +433,7 @@
 @endsection
 
 @section('footer_javascript')
-    @if (isset($quote->ProviderRS))
+    @if (isset($quote->ProviderRS) && isset($quote->ProviderRS->id))
     <script src="js/icheck.js"></script>
     <script>
         $('#policy_terms').iCheck({
@@ -400,7 +447,7 @@
         var adults = {{ (int)Request::input('adults') }};
         var childs = {{ (int)Request::input('childs') }};
         var nights = {{ (int)Carbon\Carbon::parse(Request::input('check_out'))->diffInDays(Carbon\Carbon::parse(Request::input('check_in'))) }};
-        var options = {!! json_encode($quote->ProviderRS->BookingExtraOptions->BookingExtraOption) !!};
+        var options = {!! isset($quote->ProviderRS->BookingExtraOptions) ? json_encode($quote->ProviderRS->BookingExtraOptions->BookingExtraOption) : '[]' !!};
         var rooms = {!! json_encode($quote->ProviderRS->ProductGroups->ProductGroups->Products->Product) !!};
         var state = 'quote';
 
@@ -410,7 +457,7 @@
                 price += parseFloat($(this).attr('price'));
             });
 
-            $('table.table_summary .total td.text-right').text('$'+ price.toFixed(0));
+            $('table.table_summary .total td.text-right').text('$'+ price.toFixed(2));
         }
 
         function checkForm() {
@@ -452,7 +499,7 @@
                 var selectedNights = $('input[name="selectedDates"]').val() != '' ? $('input[name="selectedDates"]').val().split(',').length : 0;
 
                 if (option.OccupancyCharge) {
-                    var op = option.FlatCharge;
+                    var op = option.OccupancyCharge;
 
                     if (op.type == 'Once_Off')
                         price += parseFloat(option.OccupancyCharge.per_adult_price) * adults +
@@ -511,7 +558,7 @@
                 });
 
                 //$('<div id="'+ pid +'" price="'+ (room.Quotes.Quote.price) +'">1 '+ room.name + '</div>').appendTo($('#rooms'));
-                $('#rooms').attr('price', room.Quotes.Quote.price).text('1 '+ room.name);
+                $('#rooms').attr('price', room.Quotes.Quote.price).text(room.name);
 
                 var options_html = [];
 

@@ -32,19 +32,13 @@
     <div class="intro_title animated fadeInDown">
         <h1>Place Your Order</h1>
         <div class="bs-wizard">
-            <div class="col-xs-4 bs-wizard-step active">
-                <div class="text-center bs-wizard-stepnum">Order</div>
+            <div class="col-xs-6 bs-wizard-step {{ (Request::is('booking/*') && !Request::is('booking/make')) ? 'active' : 'complete' }}">
+                <div class="text-center bs-wizard-stepnum">Order Details</div>
                 <div class="progress"><div class="progress-bar"></div></div>
                 <a href="#" class="bs-wizard-dot"></a>
             </div>
 
-            <div class="col-xs-4 bs-wizard-step {{ Request::is('booking/make') ? 'active' : 'disabled' }}">
-                <div class="text-center bs-wizard-stepnum">Your details</div>
-                <div class="progress"><div class="progress-bar"></div></div>
-                <a href="payment_hotel.html" class="bs-wizard-dot"></a>
-            </div>
-
-            <div class="col-xs-4 bs-wizard-step disabled">
+            <div class="col-xs-6 bs-wizard-step {{ (Request::is('booking/*') && !Request::is('booking/make')) ? 'disabled' : 'active' }}">
                 <div class="text-center bs-wizard-stepnum">Finish!</div>
                 <div class="progress"><div class="progress-bar"></div></div>
                 <a href="confirmation_hotel.html" class="bs-wizard-dot"></a>

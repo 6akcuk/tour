@@ -2,7 +2,10 @@
 
 namespace App\Jobs;
 
+use App\BookingOrder;
+use App\BookingOrderExtra;
 use App\Jobs\Job;
+use Faker\Provider\zh_TW\DateTime;
 use Illuminate\Contracts\Bus\SelfHandling;
 use Webpatser\Uuid\Uuid;
 
@@ -80,6 +83,8 @@ class OBXService extends Job implements SelfHandling
 
         $response = $client->$method($params);
 
+        //echo($client->__getLastRequest());
+
         return $response;
     }
 
@@ -87,86 +92,107 @@ class OBXService extends Job implements SelfHandling
         $start = \Carbon\Carbon::parse($request['check_in']);
         $end = \Carbon\Carbon::parse($request['check_out']);
         $nights = $end->diffInDays($start);
-        $selectedNights = trim($request['selectedDates']) ? sizeof(explode(',', trim($request['selectedDates']))) : 0;
+        $selectedNights = isset($request['selectedDates']) && trim($request['selectedDates']) ? sizeof(explode(',', trim($request['selectedDates']))) : 0;
 
-        $quote = $this->getBookingQuote($request);
+        $quote = $this->getBookingQuote($request, ucfirst($request['type']));
         $extrasPrice = 0;
         $productDetails = [];
+        $clientId = "". Uuid::generate(4);
 
-        foreach ($quote->ProviderRS->BookingExtraOptions->BookingExtraOption as $option) {
-            if (isset($request['option'][$option->id])) {
-                $price = 0;
+        $bookingOrder = BookingOrder::create([
+            'client_id'         => $clientId,
+            'type'              => ucfirst($request['type']),
+            'firstname'         => $request['firstname_booking'],
+            'lastname'          => $request['lastname_booking'],
+            'email'             => $request['email_booking'],
+            'payment_type'      => $this->cardType($request['card_number']),
+            'card'              => preg_replace("/.*(\d{4})$/", "$1", preg_replace("/[^0-9]*/", "", $request['card_number'])),
+            'billing_address'   => $request['street_1'] . $request['street_2'] ."\n" .
+                                   $request['city_booking'] .", ". $request['state_booking'] ." ". $request['postal_code'] . "\n" .
+                                   $request['country'] ."\n",
+            'check_in'          => $start->format('Y-m-d'),
+            'length'            => $nights,
+            'adults'            => $request['adults'],
+            'childs'            => $request['childs']
+        ]);
 
-                $extra = [];
+        if (isset($quote->ProviderRS->BookingExtraOptions)) {
+            foreach ($quote->ProviderRS->BookingExtraOptions->BookingExtraOption as $option) {
+                if (isset($request['option'][$option->id])) {
+                    $price = 0;
 
-                if (isset($option->OccupancyCharge)) {
-                    $op = $option->OccupancyCharge;
+                    $extra = [];
 
-                    if ($op->type == 'Once_Off') {
-                        $price += $op->per_adult_price * $request['adults'] +
-                                $op->per_child_price * $request['childs'];
+                    if (isset($option->OccupancyCharge)) {
+                        $op = $option->OccupancyCharge;
+
+                        if ($op->type == 'Once_Off') {
+                            $price += $op->per_adult_price * $request['adults'] +
+                                    $op->per_child_price * $request['childs'];
+                        } elseif ($op->type == 'Per_Night') {
+                            $price += ($op->per_adult_price * $request['adults'] +
+                                            $op->per_child_price * $request['childs']) * $nights;
+                        } elseif ($op->type == 'Per_Selected_Night') {
+                            $price += ($op->per_adult_price * $request['adults'] +
+                                            $op->per_child_price * $request['childs']) * $selectedNights;
+                        }
+
+                        $extra['OccupancyCharge'] = [
+                                'type' => $op->type,
+                                'per_adult_price' => $op->per_adult_price,
+                                'per_child_price' => $op->per_child_price
+                        ];
+                    } elseif (isset($option->FlatCharge)) {
+                        $op = $option->FlatCharge;
+
+                        if ($op->type == 'Once_Off') {
+                            $price += $op->price;
+                        } elseif ($op->type == 'Per_Night') {
+                            $price += $op->price * $nights;
+                        } elseif ($op->type == 'Per_Selected_Night') {
+                            $price += $op->price * $selectedNights;
+                        }
+
+                        $extra['FlatCharge'] = [
+                                'type' => $op->type,
+                                'price' => $op->price
+                        ];
+                    } elseif (isset($option->UnitCharge)) {
+                        $op = $option->UnitCharge;
+
+                        if ($op->type == 'Once_Off') {
+                            $price += $op->per_unit_price;
+                        } elseif ($op->type == 'Per_Night') {
+                            $price += $op->per_unit_price * $nights;
+                        } elseif ($op->type == 'Per_Selected_Night') {
+                            $price += $op->per_unit_price * $selectedNights;
+                        }
+
+                        $extra['UnitCharge'] = [
+                                'type' => $op->type,
+                                'per_unit_price' => $op->per_unit_price
+                        ];
                     }
-                    elseif ($op->type == 'Per_Night') {
-                        $price += ($op->per_adult_price * $request['adults'] +
-                                $op->per_child_price * $request['childs']) * $nights;
-                    }
-                    elseif ($op->type == 'Per_Selected_Night') {
-                        $price += ($op->per_adult_price * $request['adults'] +
-                                        $op->per_child_price * $request['childs']) * $selectedNights;
-                    }
 
-                    $extra['OccupancyCharge'] = [
-                        'type' => $op->type,
-                        'per_adult_price' => $op->per_adult_price,
-                        'per_child_price' => $op->per_child_price
-                    ];
-                }
-                elseif (isset($option->FlatCharge)) {
-                    $op = $option->FlatCharge;
+                    $extra['name'] = $option->name;
+                    $extra['code'] = $option->id;
 
-                    if ($op->type == 'Once_Off') {
-                        $price += $op->price;
-                    }
-                    elseif ($op->type == 'Per_Night') {
-                        $price += $op->price * $nights;
-                    }
-                    elseif ($op->type == 'Per_Selected_Night') {
-                        $price += $op->price * $selectedNights;
-                    }
-
-                    $extra['FlatCharge'] = [
+                    BookingOrderExtra::create([
+                            'order_id' => $bookingOrder->id,
+                            'name' => $option->name,
+                            'charge' => isset($extra['UnitCharge']) ? 'UnitCharge' : (isset($extra['OccupancyCharge']) ? 'OccupancyCharge' : 'FlatCharge'),
                             'type' => $op->type,
-                            'price' => $op->price
-                    ];
+                            'price' => $price
+                    ]);
+
+                    $extrasPrice += $price;
+                    $productDetails['BookingExtras']['BookingExtra'][] = $extra;
                 }
-                elseif (isset($option->UnitCharge)) {
-                    $op = $option->UnitCharge;
-
-                    if ($op->type == 'Once_Off') {
-                        $price += $op->per_unit_price;
-                    }
-                    elseif ($op->type == 'Per_Night') {
-                        $price += $op->per_unit_price * $nights;
-                    }
-                    elseif ($op->type == 'Per_Selected_Night') {
-                        $price += $op->per_unit_price * $selectedNights;
-                    }
-
-                    $extra['UnitCharge'] = [
-                            'type' => $op->type,
-                            'per_unit_price' => $op->per_unit_price
-                    ];
-                }
-
-                $extra['name'] = $option->name;
-                $extra['code'] = $option->id;
-
-                $extrasPrice += $price;
-                $productDetails['BookingExtras']['BookingExtra'][] = $extra;
             }
+
+            $productDetails['BookingExtras']['total_price'] = $extrasPrice;
         }
 
-        $productDetails['BookingExtras']['total_price'] = $extrasPrice;
         $productPrice = 0;
 
         //foreach ($request['quantity'] as $product_id => $_p) {
@@ -174,18 +200,53 @@ class OBXService extends Job implements SelfHandling
                 foreach ($quote->ProviderRS->ProductGroups->ProductGroups->Products->Product as $product) {
                     if ($product->id == $request['room']) {
                         //for ($i = 1; $i <= $quantity; $i++) {
+                        if ($request['type'] == 'Accommodation') {
+                            $productDetails['Product'] = [
+                                    'num_adult' => $request['adults'],
+                                    'num_children' => $request['childs'],
+                                    'num_concession' => 0,
+                                    'id' => $product->id,
+                                    'name' => $product->name,
+                                    'start_date' => $start->format('Y-m-d') . 'T14:00:00',
+                                    'finish_date' => $end->format('Y-m-d') . 'T10:00:00',
+                                    'price' => $product->Quotes->Quote->price
+                            ];
+
+                            $bookingOrder->update([
+                                    'product_name' => $request['provider_name'] . ' - ' . $product->name,
+                                    'price' => $product->Quotes->Quote->price,
+                                    'extra_price' => $extrasPrice,
+                                    'total_price' => $product->Quotes->Quote->price + $extrasPrice
+                            ]);
+
+                            $productPrice += $product->Quotes->Quote->price;
+                        } else {
+                            $days = $product->Quotes->Quote->days;
+                            $price_adults = $product->Quotes->Quote->price_adults * $days;
+                            $price_children = isset($product->Quotes->Quote->price_children) ? $product->Quotes->Quote->price_children * $days : 0;
+
+                            $productPrice += $price_adults + $price_children;
+
                             $productDetails['Product'] = [
                                 'num_adult' => $request['adults'],
                                 'num_children' => $request['childs'],
                                 'num_concession' => 0,
                                 'id' => $product->id,
                                 'name' => $product->name,
-                                'start_date' => $start->format('Y-m-d') .'T14:00:00',
-                                'finish_date' => $end->format('Y-m-d') .'T10:00:00',
-                                'price' => $product->Quotes->Quote->price
+                                'start_date' => $start->format('Y-m-d') . 'T14:00:00',
+                                'finish_date' => $end->format('Y-m-d') . 'T10:00:00',
+                                'price' => $productPrice,
+                                'price_adults' => $price_adults,
+                                'price_children' => $price_children
                             ];
 
-                            $productPrice += $product->Quotes->Quote->price;
+                            $bookingOrder->update([
+                                'product_name' => $request['provider_name'] . ' - ' . $product->name,
+                                'price' => $productPrice,
+                                'extra_price' => $extrasPrice,
+                                'total_price' => $productPrice + $extrasPrice
+                            ]);
+                        }
                         //}
                     }
                 }
@@ -193,7 +254,7 @@ class OBXService extends Job implements SelfHandling
         //}
 
         $params['Reservation'] = [
-            'client_id' => "". Uuid::generate(4),
+            'client_id' => $clientId,
             'IndustryCategory' => [
                 'type' => ucfirst($request['type'])
             ],
@@ -208,7 +269,7 @@ class OBXService extends Job implements SelfHandling
                 'surname' => $request['lastname_booking'],
                 'given_name' => $request['firstname_booking']
             ],
-            'Contact' => [
+            /*'Contact' => [
                 'Email' => $request['email_booking'],
                 'Address' => [
                     'AddressLine' => $request['street_1'] . $request['street_2'],
@@ -217,7 +278,7 @@ class OBXService extends Job implements SelfHandling
                     'PostalCode' => $request['postal_code'],
                     'StateProv' => $request['state_booking']
                 ]
-            ]
+            ]*/
         ];
 
         $params['Reservation']['PaymentDetails'] = [
@@ -236,36 +297,62 @@ class OBXService extends Job implements SelfHandling
             ]
         ];
 
-        //dd($params);
+        //dd ($params);
 
-        return $this->queryBook('MakeBooking', ['Reservations' => $params]);
+        $result = $this->queryBook('MakeBooking', ['Reservations' => $params]);
+
+        if (isset($result->Status) && isset($result->Status->Success)) {
+            $bookingOrder->update([
+                'reservation_id' => $result->Reservations->Reservation->BookingRefNo
+            ]);
+        } else {
+            $bookingOrder->delete();
+        }
+
+        //dd ($result);
+
+        return [$result, $bookingOrder];
     }
 
-    public function getBookingQuote($params, $shortName = 'Test_ToothnNailLodge')
+    public function getBookingQuote($params, $type, $shortName = 'Test_ToothnNailLodge')
     {
         $params['ProviderRQ'] = [
             'short_name' => $shortName
         ];
 
+        if (isset($params['content_id']) && $params['content_id'])
+            $params['ProviderRQ']['content_id'] = $params['content_id'];
+
         $start = \Carbon\Carbon::parse($params['check_in']);
         $end = \Carbon\Carbon::parse($params['check_out']);
 
-        $params['Query'] = [
-            'IndustryCategoryGroup' => 'Accommodation',
-            'SearchCriteria' => [
-                'LengthNights' => [
-                    'duration' => $end->diffInDays($start)
-                ],
-                'CommencingSpecific' => [
-                    'date' => $start->format('Y-m-d')
-                ],
-                'ConsumerCandidates' => [
-                    'ConsumerCandidate' => [
-                        'adults' => 2,
-                        'children' => 0
-                    ]
-                ]
+        $type = ucfirst(strtolower($type));
+
+        $searchCriteria = [];
+
+        if ($type == 'Accommodation') {
+            $searchCriteria['LengthNights'] = [
+                'duration' => $end->diffInDays($start)
+            ];
+        } else {
+            $searchCriteria['LengthDays'] = [
+                'duration' => $end->diffInDays($start)
+            ];
+        }
+
+        $searchCriteria['CommencingSpecific'] = [
+            'date' => $start->format('Y-m-d')
+        ];
+        $searchCriteria['ConsumerCandidates'] = [
+            'ConsumerCandidate' => [
+                'adults' => $params['adults'],
+                'children' => $params['childs']
             ]
+        ];
+
+        $params['Query'] = [
+            'IndustryCategory' => $type,
+            'SearchCriteria' => $searchCriteria
         ];
 
         return $this->queryBook('GetBookingQuote', $params);
@@ -279,6 +366,10 @@ class OBXService extends Job implements SelfHandling
         ]);
 
         $params['Channels'] = [
+            'DistributionChannel' => [
+                    'id' => config('tours.obx_account'),
+                    'key' => config('tours.obx_key')
+            ],
             'DistributionChannelRQ' => [
                 'id' => config('tours.obx_account'),
                 'key' => config('tours.obx_key')
@@ -288,6 +379,27 @@ class OBXService extends Job implements SelfHandling
         $response = $client->$method($params);
 
         return $response;
+    }
+
+    public function providerOptIn($providers = [])
+    {
+        $params = [];
+
+        foreach ($providers as $provider) {
+            $params['Providers']['Provider'][] = [
+                'short_name' => $provider
+            ];
+        }
+
+        $params['Query'] = [
+            'DateRangeQuery' => [
+                'status' => 'In',
+                'start_date' => substr(\Carbon\Carbon::now()->startOfYear()->format(DATE_ATOM), 0, -6),
+                'finish_date' => substr(\Carbon\Carbon::now()->endOfYear()->format(DATE_ATOM), 0, -6)
+            ]
+        ];
+
+        return $this->querySearch('ProviderOptIn', $params);
     }
 
     public function productAvailability($shortName = 'Test_ToothnNailLodge')

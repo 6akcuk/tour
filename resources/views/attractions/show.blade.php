@@ -89,44 +89,8 @@
             <p class="hidden-sm hidden-xs">
                 <a class="btn_map" data-toggle="collapse" href="#collapseMap" aria-expanded="false" aria-controls="collapseMap">View on map</a>
             </p>
-            <div class="box_style_1 expose">
-                <h3 class="inner">Check Availability</h3>
-                <div class="row">
-                    <div class="col-md-6 col-sm-6">
-                        <div class="form-group">
-                            <label><i class="icon-calendar-7"></i> Check in</label>
-                            <input class="date-pick form-control" data-date-format="M d, D" type="text">
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-sm-6">
-                        <div class="form-group">
-                            <label><i class="icon-calendar-7"></i> Check out</label>
-                            <input class="date-pick form-control" data-date-format="M d, D" type="text">
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 col-sm-6">
-                        <div class="form-group">
-                            <label>Adults</label>
-                            <div class="numbers-row">
-                                <input type="text" value="1" id="adults" class="qty2 form-control" name="quantity">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-sm-6">
-                        <div class="form-group">
-                            <label>Children</label>
-                            <div class="numbers-row">
-                                <input type="text" value="0" id="children" class="qty2 form-control" name="quantity">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <br>
 
-                <a class="btn_full" href="cart_hotel.html">Check now</a>
-            </div><!--/box_style_1 -->
+            @include('layouts.partials.book_form', ['type' => 'attraction'])
 
             @include('layouts.partials.book_phone')
 

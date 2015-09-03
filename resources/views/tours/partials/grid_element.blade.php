@@ -11,6 +11,15 @@
         </div>
         <div class="hotel_title">
             <h3><strong>{{ $tour['productName'] }}</strong></h3>
+            <div class="rating clearfix">
+                @if ($tour['optin'])
+                    <div class="pull-left">
+                    <span class="booking-available">
+                        Available <small>for booking</small>
+                    </span>
+                    </div>
+                @endif
+            </div><!-- end rating -->
         </div>
     </div><!-- End box tour -->
 </div><!-- End col-md-4 -->

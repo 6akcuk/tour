@@ -23,10 +23,16 @@
                     <sup>$</sup>
                     {{ (int)$tour['rateFrom'] }}*
                     <span class="normal_price_list"></span>
-                    <small>*From/Per night</small>
+                    <small>*From/Per person</small>
                     <p>
                         <a href="{{ route('tours.show', explode('$', $tour['productId'])[0]) }}" class="btn_1">Details</a>
                     </p>
+                    @if ($tour['optin'])
+                        <p class="booking-available">
+                            Available <br>
+                            <small>for booking</small>
+                        </p>
+                    @endif
                 </div>
             </div>
         </div>

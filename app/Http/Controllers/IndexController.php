@@ -58,4 +58,9 @@ class IndexController extends Controller
             'numberOfResults' => $hires['numberOfResults']
         ]);
     }
+
+    public function check(OBXService $OBXService)
+    {
+        dd($OBXService->providerOptIn());
+    }
 }

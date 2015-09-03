@@ -261,6 +261,25 @@ class ProductService extends Job implements SelfHandling
         return $this->services;
     }
 
+    public function bookable()
+    {
+        return true; // $this->model['optin'];
+    }
+
+    public function getV3ContentId() 
+    {
+        $id = null;
+
+        foreach ($this->model['externalSystems'] as $system) {
+            if (in_array($system['externalSystemCode'], ['V3TRAVEL_CONTENT_ID'])) {
+                $id = $system['externalSystemText'];
+                break;
+            }
+        }
+
+        return $id;
+    }
+    
     public function getTXAShortName()
     {
         $name = null;

@@ -23,6 +23,12 @@
                     <p>
                         <a href="{{ route('events.show', explode('$', $event['productId'])[0]) }}" class="btn_1">Details</a>
                     </p>
+                    @if ($event['optin'])
+                        <p class="booking-available">
+                            Available <br>
+                            <small>for booking</small>
+                        </p>
+                    @endif
                 </div>
             </div>
         </div>

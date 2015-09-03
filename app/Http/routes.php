@@ -16,6 +16,7 @@ Route::get('/index/tours', 'IndexController@tours');
 Route::get('/index/attractions', 'IndexController@attractions');
 Route::get('/index/events', 'IndexController@events');
 Route::get('/index/hires', 'IndexController@hires');
+Route::get('/index/check', 'IndexController@check');
 
 Route::group(['prefix' => 'admin'], function() {
     Route::get('auth/login', 'Auth\AuthController@getLogin');
@@ -56,3 +57,6 @@ Route::get('hires/show/{id}', ['uses' => 'HiresController@show', 'as' => 'hires.
 
 Route::post('booking/{type}/{shortname}', ['uses' => 'BookingController@quote', 'as' => 'booking.quote']);
 Route::post('booking/make', ['uses' => 'BookingController@make', 'as' => 'booking.make']);
+
+Route::get('invoice/{id}/{code}', ['uses' => 'InvoiceController@show', 'as' => 'invoice.show']);
+Route::get('mailinvoice/{id}/{code}', ['uses' => 'InvoiceController@mail', 'as' => 'invoice.mail']);

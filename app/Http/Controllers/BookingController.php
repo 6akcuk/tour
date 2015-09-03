@@ -7,12 +7,13 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 
 class BookingController extends Controller
 {
     public function quote($type, $shortName, OBXService $OBXService, Request $request)
     {
-        $quote = $OBXService->getBookingQuote($request->all());
+        $quote = $OBXService->getBookingQuote($request->all(), $type);
 
         //dd($quote);
 
@@ -21,8 +22,19 @@ class BookingController extends Controller
 
     public function make(Request $request, OBXService $OBXService)
     {
-        dd($OBXService->makeBook($request->all()));
+        $result = $OBXService->makeBook($request->all());
 
-        return view('booking.make');
+        // Send email
+        $order = $result[1];
+
+        Mail::send('emails.invoice', [
+            'order' => $order,
+            'url' => route('invoice.mail', ['id' => $order->id, 'code' => $order->reservation_id])
+        ], function ($m) use ($order) {
+            $m->from('noreply@backpackers.com.au', 'BackPackers.com.au');
+            $m->to($order->email, $order->getName())->subject('Your order on Backpackers.com.au #'. $order->id);
+        });
+
+        return view('booking.make', compact('result'));
     }
 }

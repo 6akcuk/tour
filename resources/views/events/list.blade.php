@@ -49,6 +49,7 @@
 @endsection
 
 @section('footer_javascript')
+    @if (isset($events['products'][0]))
     <?php $coord = explode(',', $events['products'][0]['boundary']) ?>
 
     @include('layouts.partials.show_js', [
@@ -59,4 +60,5 @@
         'products' => $events['products'],
         'route' => 'events.show'
     ])
+    @endif
 @endsection

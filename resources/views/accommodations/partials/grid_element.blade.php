@@ -11,8 +11,17 @@
         </div>
         <div class="hotel_title">
             <h3><strong>{{ $acc['productName'] }}</strong></h3>
-            <div class="rating">
-                @include('layouts.partials.rating', ['rating' => $acc['starRating']])
+            <div class="rating clearfix">
+                <div class="pull-left">
+                    @include('layouts.partials.rating', ['rating' => $acc['starRating']])
+                </div>
+                @if ($acc['optin'])
+                <div class="pull-right">
+                    <span class="booking-available">
+                        Available <small>for booking</small>
+                    </span>
+                </div>
+                @endif
             </div><!-- end rating -->
         </div>
     </div><!-- End box tour -->
