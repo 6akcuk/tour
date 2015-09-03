@@ -19,6 +19,7 @@ class BookingOrder extends Model
         'billing_address',
         'product_name',
         'check_in',
+        'check_out',
         'length',
         'adults',
         'childs',
@@ -27,7 +28,7 @@ class BookingOrder extends Model
         'total_price'
     ];
 
-    protected $dates = ['created_at', 'updated_at', 'check_in'];
+    protected $dates = ['created_at', 'updated_at', 'check_in', 'check_out'];
 
     public function getName()
     {

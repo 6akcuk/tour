@@ -58,7 +58,7 @@ $response = $result[0];
                                 <strong>Check in</strong>
                             </td>
                             <td>
-                                {{ $order->check_in->formatLocalized('%d %B %Y') }}
+                                {{ $order->check_in->formatLocalized('%d %B %Y at %H:%M') }}
                             </td>
                         </tr>
                         <tr>

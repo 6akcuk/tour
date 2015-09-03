@@ -50,7 +50,13 @@
 
 @section('footer_javascript')
     @if (sizeof($tours['products']))
-    <?php $coord = explode(',', $tours['products'][0]['boundary']) ?>
+    <?php
+        if (stristr($tours['products'][0]['boundary'], 'multi')) {
+            $coord = explode(" ", preg_replace('/MULTIPOINT\(([\-0-9\.]*)[ ]{1}([\-0-9\.]*).*/', "$2 $1", $tours['products'][0]['boundary']));
+        } else {
+            $coord = explode(',', $tours['products'][0]['boundary']);
+        }
+    ?>
 
     @include('layouts.partials.show_js', [
         'zoom' => 6,

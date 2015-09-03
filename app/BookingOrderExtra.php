@@ -12,6 +12,7 @@ class BookingOrderExtra extends Model
         'name',
         'charge',
         'type',
+        'quantity',
         'price'
     ];
 }

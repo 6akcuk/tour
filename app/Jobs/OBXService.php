@@ -99,6 +99,8 @@ class OBXService extends Job implements SelfHandling
         $productDetails = [];
         $clientId = "". Uuid::generate(4);
 
+        //dd($quote);
+
         $bookingOrder = BookingOrder::create([
             'client_id'         => $clientId,
             'type'              => ucfirst($request['type']),
@@ -159,18 +161,23 @@ class OBXService extends Job implements SelfHandling
                         ];
                     } elseif (isset($option->UnitCharge)) {
                         $op = $option->UnitCharge;
+                        $unit = (int) $request['unit'][$option->id];
+
+                        $unit = min($unit, $op->max_unit);
+                        $unit = max($unit, 1);
 
                         if ($op->type == 'Once_Off') {
-                            $price += $op->per_unit_price;
+                            $price += $op->per_unit_price * $unit;
                         } elseif ($op->type == 'Per_Night') {
-                            $price += $op->per_unit_price * $nights;
+                            $price += $op->per_unit_price * $nights * $unit;
                         } elseif ($op->type == 'Per_Selected_Night') {
-                            $price += $op->per_unit_price * $selectedNights;
+                            $price += $op->per_unit_price * $selectedNights * $unit;
                         }
 
                         $extra['UnitCharge'] = [
-                                'type' => $op->type,
-                                'per_unit_price' => $op->per_unit_price
+                            'type' => $op->type,
+                            'per_unit_price' => $op->per_unit_price,
+                            'num_unit' => $unit
                         ];
                     }
 
@@ -178,11 +185,12 @@ class OBXService extends Job implements SelfHandling
                     $extra['code'] = $option->id;
 
                     BookingOrderExtra::create([
-                            'order_id' => $bookingOrder->id,
-                            'name' => $option->name,
-                            'charge' => isset($extra['UnitCharge']) ? 'UnitCharge' : (isset($extra['OccupancyCharge']) ? 'OccupancyCharge' : 'FlatCharge'),
-                            'type' => $op->type,
-                            'price' => $price
+                        'order_id' => $bookingOrder->id,
+                        'name' => $option->name,
+                        'charge' => isset($extra['UnitCharge']) ? 'UnitCharge' : (isset($extra['OccupancyCharge']) ? 'OccupancyCharge' : 'FlatCharge'),
+                        'type' => $op->type,
+                        'quantity' => isset($unit) ? $unit : 1,
+                        'price' => $price
                     ]);
 
                     $extrasPrice += $price;
@@ -195,63 +203,75 @@ class OBXService extends Job implements SelfHandling
 
         $productPrice = 0;
 
-        //foreach ($request['quantity'] as $product_id => $_p) {
-        //    foreach ($_p as $product_name => $quantity) {
-                foreach ($quote->ProviderRS->ProductGroups->ProductGroups->Products->Product as $product) {
-                    if ($product->id == $request['room']) {
-                        //for ($i = 1; $i <= $quantity; $i++) {
-                        if (ucfirst($request['type']) == 'Accommodation') {
-                            $productDetails['Product'] = [
-                                    'num_adult' => $request['adults'],
-                                    'num_children' => $request['childs'],
-                                    'num_concession' => 0,
-                                    'id' => $product->id,
-                                    'name' => $product->name,
-                                    'start_date' => $start->format('Y-m-d') . 'T14:00:00',
-                                    'finish_date' => $end->format('Y-m-d') . 'T10:00:00',
-                                    'price' => $product->Quotes->Quote->price
-                            ];
+        $products = is_array($quote->ProviderRS->ProductGroups->ProductGroups->Products->Product)
+                        ? $quote->ProviderRS->ProductGroups->ProductGroups->Products->Product
+                        : [$quote->ProviderRS->ProductGroups->ProductGroups->Products->Product];
 
-                            $bookingOrder->update([
-                                    'product_name' => $request['provider_name'] . ' - ' . $product->name,
-                                    'price' => $product->Quotes->Quote->price,
-                                    'extra_price' => $extrasPrice,
-                                    'total_price' => $product->Quotes->Quote->price + $extrasPrice
-                            ]);
+        foreach ($products as $product) {
+            if ($product->id == $request['room']) {
+                //for ($i = 1; $i <= $quantity; $i++) {
+                if (ucfirst($request['type']) == 'Accommodation') {
+                    $qt = $product->Quotes->Quote;
 
-                            $productPrice += $product->Quotes->Quote->price;
-                        } else {
-                            $days = $product->Quotes->Quote->days;
-                            $price_adults = $product->Quotes->Quote->price_adults * $days;
-                            $price_children = isset($product->Quotes->Quote->price_children) ? $product->Quotes->Quote->price_children * $days : 0;
+                    $productDetails['Product'] = [
+                        'num_adult' => $request['adults'],
+                        'num_children' => $request['childs'],
+                        'num_concession' => 0,
+                        'id' => $product->id,
+                        'name' => $product->name,
+                        'start_date' => $qt->start_date,
+                        'finish_date' => $qt->finish_date,
+                        'price' => $product->Quotes->Quote->price
+                    ];
 
-                            $productPrice += $price_adults + $price_children;
+                    $bookingOrder->update([
+                        'product_name' => $request['provider_name'] . ' - ' . $product->name,
+                        'price' => $product->Quotes->Quote->price,
+                        'extra_price' => $extrasPrice,
+                        'total_price' => $product->Quotes->Quote->price + $extrasPrice,
+                        'check_in' => \Carbon\Carbon::parse($qt->start_date)->format('Y-m-d H:i:s'),
+                        'check_out' => \Carbon\Carbon::parse($qt->finish_date)->format('Y-m-d H:i:s')
+                    ]);
 
-                            $productDetails['Product'] = [
-                                'num_adult' => $request['adults'],
-                                'num_children' => $request['childs'],
-                                'num_concession' => 0,
-                                'id' => $product->id,
-                                'name' => $product->name,
-                                'start_date' => $start->format('Y-m-d') . 'T14:00:00',
-                                'finish_date' => $end->format('Y-m-d') . 'T10:00:00',
-                                'price' => $productPrice,
-                                'price_adults' => $price_adults,
-                                'price_children' => $price_children
-                            ];
-
-                            $bookingOrder->update([
-                                'product_name' => $request['provider_name'] . ' - ' . $product->name,
-                                'price' => $productPrice,
-                                'extra_price' => $extrasPrice,
-                                'total_price' => $productPrice + $extrasPrice
-                            ]);
-                        }
-                        //}
+                    $productPrice += $qt->price;
+                } else {
+                    if (isset($request['quote']) && is_array($request['quote'])) {
+                        $qt = $product->Quotes->Quote[$request['quote'][$product->id]];
+                    } else {
+                        $qt = $product->Quotes->Quote;
                     }
+
+                    $days = $qt->days;
+                    $price_adults = $qt->price_adults * $days;
+                    $price_children = isset($qt->price_children) ? $qt->price_children * $days : 0;
+
+                    $productPrice += $price_adults + $price_children;
+
+                    $productDetails['Product'] = [
+                        'num_adult' => $request['adults'],
+                        'num_children' => $request['childs'],
+                        'num_concession' => 0,
+                        'id' => $product->id,
+                        'name' => $product->name,
+                        'start_date' => $qt->start_date,
+                        'finish_date' => $qt->finish_date,
+                        'price' => $productPrice,
+                        'price_adults' => $price_adults,
+                        'price_children' => $price_children
+                    ];
+
+                    $bookingOrder->update([
+                        'product_name' => $request['provider_name'] . ' - ' . $product->name,
+                        'price' => $productPrice,
+                        'extra_price' => $extrasPrice,
+                        'total_price' => $productPrice + $extrasPrice,
+                        'check_in' => \Carbon\Carbon::parse($qt->start_date)->format('Y-m-d H:i:s'),
+                        'check_out' => \Carbon\Carbon::parse($qt->finish_date)->format('Y-m-d H:i:s')
+                    ]);
                 }
-        //    }
-        //}
+                //}
+            }
+        }
 
         $params['Reservation'] = [
             'client_id' => $clientId,
@@ -296,8 +316,6 @@ class OBXService extends Job implements SelfHandling
                 'card_type' => $this->cardType($request['card_number'])
             ]
         ];
-
-        //dd ($params);
 
         $result = $this->queryBook('MakeBooking', ['Reservations' => $params]);
 

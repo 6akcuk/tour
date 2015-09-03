@@ -38,7 +38,9 @@
                         <strong>Request:</strong><br>
                         {{ $order->type == 'Accommodation' ? 'Nights' : 'Days' }}: {{ $order->length }}<br>
                         Adults: {{ $order->adults }}<br>
-                        Childs: {{ $order->childs }}
+                        Childs: {{ $order->childs }}<br>
+                        Check-in: {{ $order->check_in->formatLocalized('%d %b %Y at %H:%M') }}<br>
+                        Check-out: {{ $order->check_out->formatLocalized('%d %b %Y at %H:%M') }}
                     </address>
                 </div>
             </div>
@@ -88,7 +90,7 @@
                             <tr>
                                 <td>{{ $extra->name }}</td>
                                 <td class="text-center">AUD ${{ round($extra->price, 2) }}</td>
-                                <td class="text-center">1</td>
+                                <td class="text-center">{{ $extra->quantity }}</td>
                                 <td class="text-right">AUD ${{ round($extra->price, 2) }}</td>
                             </tr>
                             @endforeach

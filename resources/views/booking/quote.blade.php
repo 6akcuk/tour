@@ -32,6 +32,9 @@
                     @elseif ($type == 'tours')
                     <strong>Tours available</strong> for the selected dates.
                     <br>PLEASE SELECT TOUR.
+                    @else
+                    <strong>{{ ucfirst($type) }} available</strong> for the selected dates.
+                    <br>PLEASE SELECT {{ strtoupper($type) }}
                     @endif
                 </div>
 
@@ -40,6 +43,8 @@
                     Please select room.
                     @elseif ($type == 'tours')
                     Please select tour.
+                    @else
+                    Please select one.
                     @endif
                 </div>
 
@@ -52,6 +57,8 @@
                             Room Type
                             @elseif ($type == 'tours')
                             Tour
+                            @else
+                                {{ ucfirst($type) }}
                             @endif
                         </th>
                         <th>
@@ -64,7 +71,10 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach ($quote->ProviderRS->ProductGroups->ProductGroups->Products->Product as $product)
+                    <?php
+                        $products = is_array($quote->ProviderRS->ProductGroups->ProductGroups->Products->Product) ? $quote->ProviderRS->ProductGroups->ProductGroups->Products->Product : [$quote->ProviderRS->ProductGroups->ProductGroups->Products->Product];
+                    ?>
+                    @foreach ($products as $product)
                     <tr>
                         <td>
                             <input id="room_{{ $product->id }}" type="radio" name="room" value="{{ $product->id }}" @if (!isset($product->Quotes->Quote)) disabled @endif>
@@ -78,7 +88,24 @@
                         </td>
                         <td>
                             @if (isset($product->Quotes->Quote))
-                            <strong>AUD ${{ $type == 'accommodation' ? round($product->Quotes->Quote->price / $product->Quotes->Quote->nights, 2) : $product->Quotes->Quote->price }}</strong>
+                                @if (!is_array($product->Quotes->Quote))
+                                    <strong>AUD ${{ $type == 'accommodation' ? round($product->Quotes->Quote->price / $product->Quotes->Quote->nights, 2) : $product->Quotes->Quote->price }}</strong>
+                                @else
+                                    @foreach ($product->Quotes->Quote as $idx => $qt)
+                                        <div class="row">
+                                            <div class="col-sm-2">
+                                                <input type="radio" id="quote_{{ $product->id }}_{{ $idx }}" name="quote[{{ $product->id }}]" value="{{ $idx }}">
+                                            </div>
+                                            <div class="col-sm-10">
+                                                <label for="quote_{{ $product->id }}_{{ $idx }}">
+                                                    Start: <span class="start">{{ Carbon\Carbon::parse($qt->start_date)->formatLocalized('%d %b %Y at %H:%M') }}</span><br>
+                                                    Finish: <span class="finish">{{ Carbon\Carbon::parse($qt->finish_date)->formatLocalized('%d %b %Y at %H:%M') }}</span><br>
+                                                    <strong>AUD ${{ $qt->price }}</strong>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @endif
                             @else
                                 Not Available
                             @endif
@@ -101,32 +128,6 @@
                     <tr>
                         <td colspan="2" class="text-center">- Select room first -</td>
                     </tr>
-                    @foreach ($quote->ProviderRS->BookingExtraOptions->BookingExtraOption as $option)
-                        <!--<tr>
-                            <td>
-                                {{ $option->name }}
-                                <strong>
-                                    @if (isset($option->OccupancyCharge))
-                                        +${{ $option->OccupancyCharge->per_adult_price }}*
-                                    @elseif (isset($option->FlatCharge))
-                                        +${{ $option->FlatCharge->price }}
-                                    @elseif (isset($option->UnitCharge))
-                                        +${{ $option->UnitCharge->per_unit_price }}**
-                                    @endif
-                                </strong>
-                            </td>
-                            <td>
-                                <label class="switch-light switch-ios pull-right">
-                                    <input type="checkbox" name="option[{{ $option->id }}]" id="option_{{ $option->id }}" value="1">
-                                    <span>
-                                    <span>No</span>
-                                    <span>Yes</span>
-                                    </span>
-                                    <a></a>
-                                </label>
-                            </td>
-                        </tr>-->
-                    @endforeach
                     </tbody>
                 </table>
 
@@ -336,22 +337,23 @@
                             <td>
                                 Check in
                             </td>
-                            <td class="text-right">
-                                {{ Carbon\Carbon::parse(Request::input('check_in'))->formatLocalized('%d %B %Y') }}
+                            <td id="check_in" class="text-right">
+                                {{ Carbon\Carbon::parse(Request::input('check_in'))->formatLocalized('%d %b %Y') }}
                             </td>
                         </tr>
                         <tr>
                             <td>
                                 Check out
                             </td>
-                            <td class="text-right">
-                                {{ Carbon\Carbon::parse(Request::input('check_out'))->formatLocalized('%d %B %Y') }}
+                            <td id="check_out" class="text-right">
+                                {{ Carbon\Carbon::parse(Request::input('check_out'))->formatLocalized('%d %b %Y') }}
                             </td>
                         </tr>
                         <tr>
                             <td>
                                 @if ($type == 'accommodation') Rooms
                                 @elseif ($type == 'tours') Tour
+                                @else {{ ucfirst($type) }}
                                 @endif
                             </td>
                             <td id="rooms" class="text-right"></td>
@@ -391,7 +393,11 @@
                         </tbody>
                     </table>
                     <a id="details-btn" onclick="checkForm()" class="btn_full">Set Details</a>
-                    <a class="btn_full_outline" href="{{ route("$type.show", Request::input('id')) }}"><i class="icon-right"></i> Modify your search</a>
+                    <?php
+                        if ($type == 'attraction') $route = 'attractions.show';
+                        else $route = "$type.show";
+                    ?>
+                    <a class="btn_full_outline" href="{{ route($route, Request::input('id')) }}"><i class="icon-right"></i> Modify your search</a>
                 </div>
 
                 <div class="box_style_4">
@@ -448,7 +454,7 @@
         var childs = {{ (int)Request::input('childs') }};
         var nights = {{ (int)Carbon\Carbon::parse(Request::input('check_out'))->diffInDays(Carbon\Carbon::parse(Request::input('check_in'))) }};
         var options = {!! isset($quote->ProviderRS->BookingExtraOptions) ? json_encode($quote->ProviderRS->BookingExtraOptions->BookingExtraOption) : '[]' !!};
-        var rooms = {!! json_encode($quote->ProviderRS->ProductGroups->ProductGroups->Products->Product) !!};
+        var rooms = {!! json_encode(is_array($quote->ProviderRS->ProductGroups->ProductGroups->Products->Product) ? $quote->ProviderRS->ProductGroups->ProductGroups->Products->Product : [$quote->ProviderRS->ProductGroups->ProductGroups->Products->Product]) !!};
         var state = 'quote';
 
         function mathPrice() {
@@ -523,16 +529,17 @@
                 }
                 else if (option.UnitCharge) {
                     var op = option.UnitCharge;
+                    var unit = parseInt($('input[name="unit['+ oid + ']"]').val());
 
                     if (op.type == 'Once_Off')
-                        price += parseFloat(op.per_unit_price);
+                        price += parseFloat(op.per_unit_price) * unit;
                     else if (op.type == 'Per_Night')
-                        price += parseFloat(op.per_unit_price) * nights;
+                        price += parseFloat(op.per_unit_price) * unit * nights;
                     else if (op.type == 'Per_Selected_Night')
-                        price += parseFloat(op.per_unit_price) * selectedNights;
+                        price += parseFloat(op.per_unit_price) * unit * selectedNights;
                 }
 
-                $('<tr id="' + oid + '" price="' + price + '"><td>' + option.name + '</td><td class="text-right">$' + price + '</td></tr>')
+                $('<tr id="' + oid + '" price="' + price + '"><td>' + option.name + (typeof unit != 'undefined' ? ' x'+ unit : '') + '</td><td class="text-right">$' + price + '</td></tr>')
                         .insertBefore('tr.total');
             }
 
@@ -552,13 +559,21 @@
 
                 $('#'+ pid).remove();
 
+                $('input[name="quote['+ pid +']"]').first().prop('checked', true);
+
                 var room = null;
                 $.each(rooms, function(i, _room) {
                     if (_room.id == pid) room = _room;
                 });
 
                 //$('<div id="'+ pid +'" price="'+ (room.Quotes.Quote.price) +'">1 '+ room.name + '</div>').appendTo($('#rooms'));
-                $('#rooms').attr('price', room.Quotes.Quote.price).text(room.name);
+                if (room.Quotes.Quote.length) {
+                    var idx = $('input[name="quote['+ pid +']"]:checked').val();
+                    $('#rooms').attr('price', room.Quotes.Quote[idx].price).text(room.name);
+                }
+                else {
+                    $('#rooms').attr('price', room.Quotes.Quote.price).text(room.name);
+                }
 
                 var options_html = [];
 
@@ -567,6 +582,7 @@
                         $.each(options, function (j, option) {
                             if (option.id == extra.booking_extra_option_id) {
                                 var priceText = '+$';
+                                var selector = '';
 
                                 if (option.OccupancyCharge) {
                                     var op = option.OccupancyCharge;
@@ -608,6 +624,12 @@
                                     else if (op.type == 'Per_Selected_Night') {
                                         priceText += '*****';
                                     }
+
+                                    selector = '\
+                                    <div class="numbers-row numbers-row-small pull-right">\
+                                    <input type="text" value="1" max="'+ op.max_unit + '" class="qty2 form-control" name="unit['+ option.id +']">\
+                                    </div>\
+                                    ';
                                 }
 
                                 options_html.push('\
@@ -627,6 +649,7 @@
                                     </span>\
                                     <a></a>\
                                 </label>\
+                                '+ selector +'\
                             </td>\
                         </tr>');
 
@@ -637,11 +660,53 @@
 
                 $('table.options_cart tbody').html(options_html.join(''));
 
+                $(".numbers-row").append('<div class="inc button_inc">+</div><div class="dec button_inc">-</div>');
+                $(".numbers-row-small .button_inc").on("click",function() {
+                    var $button = $(this);
+                    var $input = $button.parent().find("input");
+                    var oid = $input.attr('name').replace(/unit\[(\w+)\]/, '$1');
+                    var oldValue = $input.val();
+                    var newVal = 0;
+                    var maxValue = parseInt($input.attr('max'));
+
+                    if($button.text()=="+") {
+                        newVal=parseFloat(oldValue)+1;
+                        if (parseInt(newVal) > maxValue) {
+                            newVal = maxValue;
+                        }
+                    }
+                    else {
+                        if(oldValue>1) {
+                            newVal = parseFloat(oldValue)-1;
+                        }
+                        else {
+                            newVal = 1;
+                        }
+                    }
+
+                    $input.val(newVal);
+
+                    optionChanged($('#option_'+ oid));
+                });
+
                 mathPrice();
             });
 
-            $('input[type="checkbox"]').change(function() {
+            $('input[name*="quote"]').change(function() {
+                var pid = $(this).attr('name').replace(/quote\[(.*)\]/, '$1');
 
+                var room = null;
+                $.each(rooms, function(i, _room) {
+                    if (_room.id == pid) room = _room;
+                });
+
+                var idx = $(this).val();
+                $('#rooms').attr('price', room.Quotes.Quote[idx].price);
+
+                $('#check_in').text($(this).parent().next().find('span.start').text());
+                $('#check_out').text($(this).parent().next().find('span.finish').text());
+
+                mathPrice();
             });
         });
     </script>
