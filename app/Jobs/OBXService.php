@@ -200,7 +200,7 @@ class OBXService extends Job implements SelfHandling
                 foreach ($quote->ProviderRS->ProductGroups->ProductGroups->Products->Product as $product) {
                     if ($product->id == $request['room']) {
                         //for ($i = 1; $i <= $quantity; $i++) {
-                        if ($request['type'] == 'Accommodation') {
+                        if (ucfirst($request['type']) == 'Accommodation') {
                             $productDetails['Product'] = [
                                     'num_adult' => $request['adults'],
                                     'num_children' => $request['childs'],
