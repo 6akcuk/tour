@@ -9,14 +9,14 @@
         <div class="col-md-6 col-sm-6">
             <div class="form-group">
                 <label><i class="icon-calendar-7"></i> Check in</label>
-                <input name="check_in" class="date-pick form-control" data-date-format="M d, D" type="text">
+                <input name="check_in" class="form-control" data-date-format="M d, D" type="text">
             </div>
         </div>
         {{--@if ($type == 'accommodation') --}}
         <div class="col-md-6 col-sm-6">
             <div class="form-group">
                 <label><i class="icon-calendar-7"></i> Check out</label>
-                <input name="check_out" class="date-pick form-control" data-date-format="M d, D" type="text">
+                <input name="check_out" class="form-control" data-date-format="M d, D" type="text">
             </div>
         </div>
         {{--@else
@@ -52,3 +52,12 @@
     {!! Form::close() !!}
 </div><!--/box_style_1 -->
 @endif
+
+@section('footer_javascript')
+    @parent
+
+    <script>
+        $('input[name="check_in"]').datepicker('setDate', 'today');
+        $('input[name="check_out"]').datepicker('setDate', '+1d');
+    </script>
+@endsection

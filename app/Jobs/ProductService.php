@@ -86,12 +86,19 @@ class ProductService extends Job implements SelfHandling
         return $address['addressLine1'] .', '. $address['cityName'] .', '. $address['areaName'];
     }
 
+    /**
+     * Get product coordinates.
+     *
+     * @return array
+     */
     public function getCoordinates()
     {
-        $address = $this->model['addresses'][0];
+        $key = array_search('PHYSICAL', array_column($this->model['addresses'], 'attributeIdAddress'));
+        $address = $this->model['addresses'][$key];
+
         return [
-                'lat' => $address['geocodeGdaLatitude'],
-                'long' => $address['geocodeGdaLongitude']
+            'lat' => $address['geocodeGdaLatitude'],
+            'long' => $address['geocodeGdaLongitude']
         ];
     }
 

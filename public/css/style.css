@@ -2381,7 +2381,7 @@ ul.list_order li span {
   left:0;
   top:3px;
 }
-.img_container a:hover img {
+/*.img_container a:hover img {
 	-webkit-transform:scale(1);
 	transform:scale(1);
 }
@@ -2390,7 +2390,7 @@ ul.list_order li span {
 	transform:scale(1.2);
 	-webkit-transition: all 0.7s ease;
 	transition: all 0.7s ease;
-}
+}*/
 .short_info {
 	position:absolute;
 	left:0;
