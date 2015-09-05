@@ -27,6 +27,7 @@
                         <ul>
                             <li><a href="/">Home</a></li>
                             @if (Auth::check())<li><a href="/admin/users">Users</a></li>
+                            <li><a href="{{ route('admin.pages.index') }}">Pages</a></li>
                             <li><a href="/admin/blogs">Blogs</a></li>
                             <li><a href="/admin/auth/logout">Log Out</a></li>
                             @endif

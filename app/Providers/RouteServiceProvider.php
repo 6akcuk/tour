@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\BlogCategory;
+use App\Page;
 use App\Post;
 use App\Tag;
 use Illuminate\Routing\Router;
@@ -36,6 +37,9 @@ class RouteServiceProvider extends ServiceProvider
         });
         $router->bind('tag_name', function($value) {
             return Tag::where('tag', '=', $value)->first();
+        });
+        $router->bind('page', function($page) {
+            return Page::where('slug', $page)->first();
         });
 
         parent::boot($router);

@@ -30,6 +30,9 @@ Route::group(['prefix' => 'admin'], function() {
         Route::resource('blogs/posts', 'PostsController');
         Route::resource('blogs/tags', 'TagsController');
         Route::resource('blogs', 'BlogsController');
+        Route::resource('pages', 'PagesController');
+
+        Route::post('pages/upload', ['uses' => 'PagesController@upload', 'as' => 'admin.pages.upload']);
     });
 });
 
@@ -60,3 +63,6 @@ Route::post('booking/make', ['uses' => 'BookingController@make', 'as' => 'bookin
 
 Route::get('invoice/{id}/{code}', ['uses' => 'InvoiceController@show', 'as' => 'invoice.show']);
 Route::get('mailinvoice/{id}/{code}', ['uses' => 'InvoiceController@mail', 'as' => 'invoice.mail']);
+
+// Pages
+Route::get('{page}', ['uses' => 'PagesController@show', 'as' => 'page.show']);

@@ -9,10 +9,10 @@
             <div class="col-md-3 col-sm-3">
                 <h3>About</h3>
                 <ul>
-                    <li><a href="{{ url('/blogs/about-us') }}">About us</a></li>
+                    <li><a href="{{ url('/about-us') }}">About us</a></li>
                     <li><a href="{{ route('blogs.index') }}">Blogs</a></li>
                     <li><a href="{{ url('/admin/auth/login') }}">Login</a></li>
-                    <li><a href="{{ url('/blogs/terms-and-condition') }}">Terms and condition</a></li>
+                    <li><a href="{{ url('/terms-and-condition') }}">Terms and condition</a></li>
                 </ul>
             </div>
             <div class="col-md-3 col-sm-2">
