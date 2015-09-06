@@ -1,4 +1,4 @@
-<div class="col-md-{{ $columns == 2 ? 6 : 4 }} col-sm-6 wow zoomIn" data-wow-delay="0.1s">
+<div class="col-md-{{ $columns == 2 ? 6 : 4 }} col-sm-6 zoomIn" data-wow-delay="0.1s">
     <div class="hotel_container">
         <div class="img_container">
             <a href="{{ route('events.show', explode('$', $event['productId'])[0]) }}">

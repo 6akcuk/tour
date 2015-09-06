@@ -38,7 +38,8 @@ class HiresController extends Controller
             $order[] = 'product_name '. ($request->input('sort_name') == 'desc' ? 'desc' : 'asc');
         }
 
-        $exp = ['ESC_TXA_DEFAULT', 'ESC_TXA_MULTI'];
+        //$exp = ['ESC_TXA_DEFAULT', 'ESC_TXA_MULTI'];
+        $exp = [];
         $params['att'] = implode('|', $exp);
 
         $params['size'] = 10;

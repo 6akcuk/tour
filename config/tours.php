@@ -11,6 +11,9 @@ return [
     //'obx_account' => 'Backpackers_web',
     //'obx_key' => '30620B0F-D399-4E75-BB45-D8DA06F41E68',
 
+    'contact_email' => '6akcuk@gmail.com',
+    'contact_name' => 'Backpackers.com.au',
+
     'regions' => [
         'All'               => 'All',
         'Adelaide'          => 'Adelaide City',

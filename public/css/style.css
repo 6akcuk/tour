@@ -1091,7 +1091,7 @@ ul#cat_nav i {
 	position:absolute;
 	left:-10%;
 }
-.img_list a img{
+/*.img_list a img{
 	-webkit-transform:scale(1.2);
 	transform:scale(1.2);
 	-webkit-transition: all 0.7s ease;
@@ -1100,7 +1100,7 @@ ul#cat_nav i {
 .img_list a:hover img{
 	-webkit-transform:scale(1);
 	transform:scale(1);
-}
+}*/
 .img_list .short_info {
 	padding:5px 5px 5px 5px;
 	text-align:left;

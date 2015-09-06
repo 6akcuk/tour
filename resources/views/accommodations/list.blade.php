@@ -1,7 +1,7 @@
 @extends('accommodations.search_layout')
 
 @section('breadcrumbs')
-    <li>Accommodations</li>
+    <li>Accommodation</li>
 @endsection
 
 @section('search_content')
@@ -50,7 +50,7 @@
             @include('accommodations.partials.list_element')
         @endif
     @empty
-        <div class="text-center">No accommodations founded.</div>
+        <div class="text-center">No accommodation founded.</div>
     @endforelse
 
     <hr>

@@ -1,12 +1,7 @@
 <footer>
     <div class="container">
         <div class="row">
-            <div class="col-md-3 col-sm-3">
-                <h3>Need help?</h3>
-                <!--<a href="tel://004542344599" id="phone">+45 423 445 99</a>-->
-                <a href="mailto:help@backpackers.com.au" id="email_footer">help@backpackers.com.au</a>
-            </div>
-            <div class="col-md-3 col-sm-3">
+            <div class="col-md-5 col-sm-4">
                 <h3>About</h3>
                 <ul>
                     <li><a href="{{ url('/about-us') }}">About us</a></li>
@@ -15,7 +10,7 @@
                     <li><a href="{{ url('/terms-and-condition') }}">Terms and condition</a></li>
                 </ul>
             </div>
-            <div class="col-md-3 col-sm-2">
+            <div class="col-md-3 col-sm-4">
                 <h3>Discover</h3>
                 <ul>
                     <li><a href="{{ route('accommodation.index') }}">Accommodation</a></li>
@@ -25,8 +20,11 @@
                     <li><a href="{{ route('hires.index') }}">Hire</a></li>
                 </ul>
             </div>
-            <div class="col-md-3 col-sm-4">
-                <div id="logo">
+            <div class="col-md-4 col-sm-4">
+                <div id="logo" class="text-right hidden-xs">
+                    <a href="/"><img src="img/logo_sticky.png" height="34" alt="City tours" data-retina="true" class="logo_sticky"></a>
+                </div>
+                <div id="logo" class="visible-xs">
                     <a href="/"><img src="img/logo_sticky.png" height="34" alt="City tours" data-retina="true" class="logo_sticky"></a>
                 </div>
             </div>

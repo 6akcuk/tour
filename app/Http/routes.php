@@ -17,6 +17,8 @@ Route::get('/index/attractions', 'IndexController@attractions');
 Route::get('/index/events', 'IndexController@events');
 Route::get('/index/hires', 'IndexController@hires');
 Route::get('/index/check', 'IndexController@check');
+Route::get('/contact-us', 'IndexController@contact');
+Route::post('/contact-us', 'IndexController@sendMessage');
 
 Route::group(['prefix' => 'admin'], function() {
     Route::get('auth/login', 'Auth\AuthController@getLogin');
