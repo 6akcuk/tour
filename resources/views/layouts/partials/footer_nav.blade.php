@@ -8,6 +8,7 @@
                     <li><a href="{{ route('blogs.index') }}">Blogs</a></li>
                     <li><a href="{{ url('/admin/auth/login') }}">Login</a></li>
                     <li><a href="{{ url('/terms-and-condition') }}">Terms and condition</a></li>
+                    <li><a href="{{ url('/contact-us') }}">Contact us</a></li>
                 </ul>
             </div>
             <div class="col-md-3 col-sm-4">
