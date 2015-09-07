@@ -128,7 +128,7 @@ class ATLASService extends Job implements SelfHandling
     {
         return $this->query('products', [
                 'cats' => $category,
-                'size' => 12,
+                'size' => 6, // was 12
                 'dsc' => 'false',
                 'ratings' => '-1,0.5,1,1.5,2,2.5,3,3.5,4,4.5,5',
                 'fl' => 'product_id,product_name,product_image,rate_from, product_classifications',
