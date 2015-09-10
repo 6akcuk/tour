@@ -46,6 +46,13 @@
   }
 }
 
+.additional-search {
+  padding: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #F16251;
+}
+
 .btn_delete {
   margin-left: 10px;
 }

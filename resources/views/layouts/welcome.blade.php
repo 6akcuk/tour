@@ -47,7 +47,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row geo_search"></div>
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
@@ -78,6 +77,7 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row geo_search"></div>
                     <hr>
                     <button class="btn_1 green"><i class="icon-search"></i>Search now</button>
                 </form>
@@ -100,7 +100,6 @@
                             </div>
                         </div>
                     </div><!-- End row -->
-                    <div class="row geo_search"></div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -115,6 +114,7 @@
                             </div>
                         </div>
                     </div><!-- End row -->
+                    <div class="row geo_search"></div>
                     <hr>
                     <button class="btn_1 green"><i class="icon-search"></i>Search now</button>
                 </form>
@@ -137,7 +137,6 @@
                             </div>
                         </div>
                     </div><!-- End row -->
-                    <div class="row geo_search"></div>
                     <div class="row">
                         @foreach (config('tours.attractions_filters') as $value => $label)
                         <div class="col-md-4 col-sm-4 col-xs-6">
@@ -147,6 +146,7 @@
                         </div>
                         @endforeach
                     </div> <!-- End row -->
+                    <div class="row geo_search"></div>
                     <hr>
                     <button class="btn_1 green"><i class="icon-search"></i>Search now</button>
                 </form>
@@ -169,7 +169,6 @@
                             </div>
                         </div>
                     </div><!-- End row -->
-                    <div class="row geo_search"></div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -193,6 +192,7 @@
                             </div>
                         @endforeach
                     </div> <!-- End row -->
+                    <div class="row geo_search"></div>
                     <hr>
                     <button class="btn_1 green"><i class="icon-search"></i>Search now</button>
                 </form>

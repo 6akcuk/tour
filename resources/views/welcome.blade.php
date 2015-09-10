@@ -4,25 +4,27 @@
     <script>
         $(document).ready(function() {
             $('div.geo_search').html('\
-            <div class="col-md-4">\
-                <div class="form-group">\
-                    <label>State</label>\
-                    <select class="form-control" name="state"><option value="">All states</option></select>\
+            <div class="text-center additional-search" onclick="$(this).hide(); $(this).next().slideDown()">Show additional parameters</div>\
+            <div style="display: none">\
+                <div class="col-md-4">\
+                    <div class="form-group">\
+                        <label>State</label>\
+                        <select class="form-control" name="state"><option value="">All states</option></select>\
+                    </div>\
                 </div>\
-            </div>\
-            <div class="col-md-4">\
-                <div class="form-group">\
-                    <label>Region</label>\
-                    <select class="form-control" name="region"><option value="">All Regions</option></select>\
+                <div class="col-md-4">\
+                    <div class="form-group">\
+                        <label>Region</label>\
+                        <select class="form-control" name="region"><option value="">All Regions</option></select>\
+                    </div>\
                 </div>\
-            </div>\
-            <div class="col-md-4">\
-                <div class="form-group">\
-                    <label>City</label>\
-                    <select class="form-control" name="city"><option value="">All Cities</option></select>\
+                <div class="col-md-4">\
+                    <div class="form-group">\
+                        <label>City</label>\
+                        <select class="form-control" name="city"><option value="">All Cities</option></select>\
+                    </div>\
                 </div>\
-            </div>\
-            ');
+            </div>');
 
             $.getJSON('/js/prepopulatelocations.json', function(response) {
                 window['locations'] = response;

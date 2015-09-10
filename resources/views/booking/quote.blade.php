@@ -255,14 +255,6 @@
                         </div>
                     </div><!--End row -->
 
-                    <hr>
-
-                    <h4>Or checkout with Paypal</h4>
-                    <p>
-                    </p>
-                    <p>
-                        <img src="img/paypal_bt.png" alt="">
-                    </p>
                 </div><!--End step -->
 
                 <div class="form_title">
