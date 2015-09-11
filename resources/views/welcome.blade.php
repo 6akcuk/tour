@@ -2,9 +2,22 @@
 
 @section('footer_javascript')
     <script>
+        function showOrHideOptions(el) {
+            var curText = $(el).text();
+
+            if (curText == 'More options') {
+                $(el).prev().slideDown(function() {
+                    $(el).text('Hide options');
+                });
+            } else {
+                $(el).prev().slideUp(function() {
+                    $(el).text('More options');
+                });
+            }
+        }
+
         $(document).ready(function() {
             $('div.geo_search').html('\
-            <div class="text-center additional-search" onclick="$(this).hide(); $(this).next().slideDown()">Show additional parameters</div>\
             <div style="display: none">\
                 <div class="col-md-4">\
                     <div class="form-group">\
@@ -24,7 +37,9 @@
                         <select class="form-control" name="city"><option value="">All Cities</option></select>\
                     </div>\
                 </div>\
-            </div>');
+            </div>\
+            <div class="text-center additional-search" onclick="showOrHideOptions(this)">More options</div>\
+            ');
 
             $.getJSON('/js/prepopulatelocations.json', function(response) {
                 window['locations'] = response;
