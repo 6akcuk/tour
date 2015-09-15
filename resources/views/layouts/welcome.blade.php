@@ -47,7 +47,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <!--<div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label><i class="icon-calendar-7"></i> Check in</label>
@@ -76,7 +76,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>-->
                     <div class="row geo_search"></div>
                     <hr>
                     <button class="btn_1 green"><i class="icon-search"></i>Search now</button>

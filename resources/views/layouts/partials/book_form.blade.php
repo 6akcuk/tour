@@ -1,4 +1,4 @@
-@if ($model->bookable())
+@if ($model->bookable() && $model->getTXAShortName())
 <div class="box_style_1 expose">
     {!! Form::open(['route' => ['booking.quote', $type, $model->getTXAShortName()]]) !!}
     {!! Form::hidden('id', $model->getId()) !!}
