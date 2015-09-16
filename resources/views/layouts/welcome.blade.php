@@ -100,20 +100,6 @@
                             </div>
                         </div>
                     </div><!-- End row -->
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label><i class="icon-calendar-7"></i> From</label>
-                                <input class="date-pick form-control" data-date-format="M d, D" type="text" name="from">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label><i class="icon-calendar-7"></i> To</label>
-                                <input class="date-pick form-control" data-date-format="M d, D" type="text" name="to">
-                            </div>
-                        </div>
-                    </div><!-- End row -->
                     <div class="row geo_search"></div>
                     <hr>
                     <button class="btn_1 green"><i class="icon-search"></i>Search now</button>

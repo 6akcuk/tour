@@ -48,9 +48,11 @@ class ATLASService extends Job implements SelfHandling
         $result = json_decode(iconv('utf-16', 'utf-8', file_get_contents($url)), true);
 
         if ($service == 'products') {
-            $providers = ['Test_ToothnNailLodge'];
+            //$providers = ['Test_ToothnNailLodge'];
+            $providers = [];
 
             if (isset($result['products']) && sizeof($result['products']) > 0) {
+
                 foreach ($result['products'] as &$product) {
                     $product['optin'] = false;
 

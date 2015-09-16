@@ -410,11 +410,7 @@ class OBXService extends Job implements SelfHandling
         }
 
         $params['Query'] = [
-            'DateRangeQuery' => [
-                'status' => 'In',
-                'start_date' => substr(\Carbon\Carbon::now()->startOfYear()->format(DATE_ATOM), 0, -6),
-                'finish_date' => substr(\Carbon\Carbon::now()->endOfYear()->format(DATE_ATOM), 0, -6)
-            ]
+            'CompleteQuery' => []
         ];
 
         return $this->querySearch('ProviderOptIn', $params);

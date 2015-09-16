@@ -1,6 +1,15 @@
 @extends('layouts.welcome')
 
 @section('footer_javascript')
+
+    <script src="js/icheck.js"></script>
+    <script>
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_square-grey',
+            radioClass: 'iradio_square-grey'
+        });
+    </script>
+
     <script>
         function showOrHideOptions(el) {
             var curText = $(el).text();
