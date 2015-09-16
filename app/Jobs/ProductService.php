@@ -270,7 +270,7 @@ class ProductService extends Job implements SelfHandling
 
     public function bookable()
     {
-        return true; // $this->model['optin'];
+        return $this->model['optin'];
     }
 
     public function getV3ContentId() 
