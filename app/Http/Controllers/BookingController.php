@@ -13,7 +13,7 @@ class BookingController extends Controller
 {
     public function quote($type, $shortName, OBXService $OBXService, Request $request)
     {
-        $quote = $OBXService->getBookingQuote($request->all(), $type);
+        $quote = $OBXService->getBookingQuote($request->all(), $type, $shortName);
 
         //dd($quote);
 
@@ -22,7 +22,7 @@ class BookingController extends Controller
 
     public function make(Request $request, OBXService $OBXService)
     {
-        $result = $OBXService->makeBook($request->all());
+        $result = $OBXService->makeBook($request->all(), $request->short_name);
 
         // Send email
         $order = $result[1];
