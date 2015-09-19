@@ -1513,7 +1513,8 @@ a#filters_col_bt .icon_set_1_icon-65{
 	margin:0 0 10px 20px;
 }
 .cards{
-	margin-top:18px;
+	margin-top:28px;
+	width: 48px;
 }
 .table{
 	border-bottom:1px solid #ddd;

@@ -38,7 +38,7 @@
             @include('tours.partials.list_element')
         @endif
     @empty
-        <div class="text-center">No tours founded.</div>
+        <div class="text-center">No tours found.</div>
     @endforelse
 
     <hr>

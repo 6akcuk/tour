@@ -50,7 +50,7 @@
             @include('accommodations.partials.list_element')
         @endif
     @empty
-        <div class="text-center">No accommodation founded.</div>
+        <div class="text-center">No accommodation found.</div>
     @endforelse
 
     <hr>

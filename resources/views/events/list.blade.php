@@ -38,7 +38,7 @@
             @include('events.partials.list_element')
         @endif
     @empty
-        <div class="text-center">No events founded.</div>
+        <div class="text-center">No events found.</div>
     @endforelse
 
     <hr>

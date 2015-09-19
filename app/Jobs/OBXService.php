@@ -383,16 +383,18 @@ class OBXService extends Job implements SelfHandling
             'trace' => true
         ]);
 
-        $params['Channels'] = [
-            'DistributionChannel' => [
+        if (!isset($params['Channels'])) {
+            $params['Channels'] = [
+                'DistributionChannel' => [
                     'id' => config('tours.obx_account'),
                     'key' => config('tours.obx_key')
-            ],
-            'DistributionChannelRQ' => [
-                'id' => config('tours.obx_account'),
-                'key' => config('tours.obx_key')
-            ]
-        ];
+                ],
+                'DistributionChannelRQ' => [
+                    'id' => config('tours.obx_account'),
+                    'key' => config('tours.obx_key')
+                ]
+            ];
+        }
 
         $response = $client->$method($params);
 
@@ -443,5 +445,33 @@ class OBXService extends Job implements SelfHandling
         ];
 
         return $this->querySearch('ProductAvailability', $params);
+    }
+
+    public function getProvider($shortName) {
+        $params = [
+            'Query' => [
+                'SearchGroup' => [
+                    'SearchCriteriaShortName' => [
+                        'exact' => $shortName
+                    ]
+                ]
+            ],
+            'Channels' => [
+                'CO_DistributionChannelRQType' => [
+                    'id' => config('tours.obx_account'),
+                    'key' => config('tours.obx_key')
+                ]
+            ],
+            'Response' => [
+                'IncludeBookingDetails' => [
+                    'include' => true
+                ],
+                'IncludeECommerceDetails' => [
+                    'include' => true
+                ]
+            ]
+        ];
+
+        return $this->querySearch('ProviderSearch', $params);
     }
 }

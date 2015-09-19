@@ -40,7 +40,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="4" class="text-center">Pages not founded.</td>
+                        <td colspan="4" class="text-center">Pages not found.</td>
                     </tr>
                 @endforelse
                 </tbody>

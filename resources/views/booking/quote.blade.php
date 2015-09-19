@@ -131,6 +131,10 @@
                     </tbody>
                 </table>
 
+                <div id="select-night-info" class="alert alert-info hidden">
+                    Please select nights for this option.
+                </div>
+
                 <table class="table table-striped cart-list">
                     <thead>
                     <tr>
@@ -219,7 +223,19 @@
                             </div>
                         </div>
                         <div class="col-md-6 col-sm-6">
-                            <img src="img/cards.png" width="207" height="43" alt="Cards" class="cards">
+                            @foreach ($provider->ECommerceDetails->CreditCardAccepted as $card)
+                                @if ($card->type == 'MASTERCARD')
+                                    <img class="cards" src="img/payments/Mastercard.png">
+                                @elseif ($card->type == 'VISA')
+                                    <img class="cards" src="img/payments/Visa.png">
+                                @elseif ($card->type == 'AMERICANEXPRESS')
+                                    <img class="cards" src="img/payments/Amex.png">
+                                @elseif ($card->type == 'DINERS')
+                                    <img class="cards" src="img/payments/Diners Club.png">
+                                @elseif ($card->type == 'DISCOVER')
+                                    <img class="cards" src="img/payments/Discover.png">
+                                @endif
+                            @endforeach
                         </div>
                     </div>
                     <div class="row">
@@ -312,9 +328,16 @@
                 </div><!--End step -->
 
                 <div id="policy">
-                    <h4>Cancellation policy</h4>
+                    <h4>Booking Terms</h4>
                     <div class="form-group">
-                        <label><input type="checkbox" name="policy_terms" id="policy_terms" required>I accept terms and conditions and general policy.</label>
+                        {!! $provider->BookingDetails->BookingTerms !!}
+                    </div>
+                    <h4>Conditions of Use</h4>
+                    <div class="form-group">
+                        {!! $provider->BookingDetails->ConditionsOfUse !!}
+                    </div>
+                    <div class="form-group">
+                        <label><input type="checkbox" name="policy_terms" id="policy_terms" required>I accept terms and conditions.</label>
                     </div>
                     <button class="btn_1 green medium">Book now</button>
                 </div>
@@ -417,7 +440,7 @@
             </div>
             @else
             <div class="alert alert-info">
-                Nothing founded. Please, set another parameters.
+                Nothing found. Please, set another parameters.
                 <br>
                 <a href="{{ route($type .'.show', Request::input('id')) }}">Go Back</a>
             </div>
@@ -489,9 +512,13 @@
 
             } else {
                 var option = null;
-                $.each(options, function (i, _option) {
-                    if (_option.id == oid) option = _option;
-                });
+
+                if (options.length) {
+                    $.each(options, function (i, _option) {
+                        if (_option.id == oid) option = _option;
+                    });
+                }
+                else option = options;
 
                 var price = 0;
                 var selectedNights = $('input[name="selectedDates"]').val() != '' ? $('input[name="selectedDates"]').val().split(',').length : 0;
@@ -505,9 +532,12 @@
                     else if (op.type == 'Per_Night')
                         price += (parseFloat(option.OccupancyCharge.per_adult_price) * adults +
                                  parseFloat(option.OccupancyCharge.per_child_price) * childs) * nights;
-                    else if (op.type == 'Per_Selected_Night')
+                    else if (op.type == 'Per_Selected_Night') {
                         price += (parseFloat(option.OccupancyCharge.per_adult_price) * adults +
                                 parseFloat(option.OccupancyCharge.per_child_price) * childs) * selectedNights;
+
+                        if (parseInt(selectedNights) == 0) $('#select-night-info').removeClass('hidden');
+                    }
                 }
                 else if (option.FlatCharge) {
                     var op = option.FlatCharge;
@@ -516,8 +546,11 @@
                         price += parseFloat(op.price);
                     else if (op.type == 'Per_Night')
                         price += parseFloat(op.price) * nights;
-                    else if (op.type == 'Per_Selected_Night')
+                    else if (op.type == 'Per_Selected_Night') {
                         price += parseFloat(op.price) * selectedNights;
+
+                        if (parseInt(selectedNights) == 0) $('#select-night-info').removeClass('hidden');
+                    }
                 }
                 else if (option.UnitCharge) {
                     var op = option.UnitCharge;
@@ -527,8 +560,11 @@
                         price += parseFloat(op.per_unit_price) * unit;
                     else if (op.type == 'Per_Night')
                         price += parseFloat(op.per_unit_price) * unit * nights;
-                    else if (op.type == 'Per_Selected_Night')
+                    else if (op.type == 'Per_Selected_Night') {
                         price += parseFloat(op.per_unit_price) * unit * selectedNights;
+
+                        if (parseInt(selectedNights) == 0) $('#select-night-info').removeClass('hidden');
+                    }
                 }
 
                 $('<tr id="' + oid + '" price="' + price + '"><td>' + option.name + (typeof unit != 'undefined' ? ' x'+ unit : '') + '</td><td class="text-right">$' + price + '</td></tr>')
@@ -543,6 +579,7 @@
                 multidate: true,
                 autoclose: false
             }).on('changeDate', function() {
+                $('#select-night-info').addClass('hidden');
                 $('input[name*="option"]:checked').change();
             });
 
@@ -569,86 +606,95 @@
 
                 var options_html = [];
 
+                function _option(option) {
+                    var priceText = '+$';
+                    var selector = '';
+
+                    if (option.OccupancyCharge) {
+                        var op = option.OccupancyCharge;
+
+                        priceText += op.per_adult_price;
+
+                        if (op.type == 'Once_Off') {
+                            priceText += '*';
+                        }
+                        else if (op.type == 'Per_Night') {
+                            priceText += '***';
+                        }
+                        else if (op.type == 'Per_Selected_Night') {
+                            priceText += '****';
+                        }
+                    }
+                    else if (option.FlatCharge) {
+                        var op = option.FlatCharge;
+
+                        priceText += op.price;
+
+                        if (op.type == 'Once_Off') {
+                        }
+                        else if (op.type == 'Per_Night') {
+                            priceText += '**';
+                        }
+                        else if (op.type == 'Per_Selected_Night') {
+                            priceText += '*****';
+                        }
+                    }
+                    else if (option.UnitCharge) {
+                        var op = option.UnitCharge;
+
+                        priceText += op.per_unit_price;
+
+                        if (op.type == 'Per_Night') {
+                            priceText += '**';
+                        }
+                        else if (op.type == 'Per_Selected_Night') {
+                            priceText += '*****';
+                        }
+
+                        selector = '\
+                                        <div class="numbers-row numbers-row-small pull-right">\
+                                        <input type="text" value="1" max="' + op.max_unit + '" class="qty2 form-control" name="unit[' + option.id + ']">\
+                                        </div>\
+                                        ';
+                    }
+
+                    return ('\
+                                    <tr>\
+                                        <td>\
+                                            ' + option.name + '\
+                                            <strong>\
+                                            ' + priceText + '\
+                                            </strong>\
+                                        </td>\
+                                        <td>\
+                                            <label class="switch-light switch-ios pull-right">\
+                                                <input type="checkbox" name="option[' + option.id + ']" id="option_' + option.id + '" onchange="optionChanged(this)" value="1">\
+                                                <span>\
+                                                <span>No</span>\
+                                                <span>Yes</span>\
+                                                </span>\
+                                                <a></a>\
+                                            </label>\
+                                            ' + selector + '\
+                                        </td>\
+                                    </tr>');
+                }
+
                 if (room.Quotes.Quote.BookingExtras) {
-                    $.each(room.Quotes.Quote.BookingExtras.BookingExtra, function (i, extra) {
-                        $.each(options, function (j, option) {
-                            if (option.id == extra.booking_extra_option_id) {
-                                var priceText = '+$';
-                                var selector = '';
-
-                                if (option.OccupancyCharge) {
-                                    var op = option.OccupancyCharge;
-
-                                    priceText += op.per_adult_price;
-
-                                    if (op.type == 'Once_Off') {
-                                        priceText += '*';
-                                    }
-                                    else if (op.type == 'Per_Night') {
-                                        priceText += '***';
-                                    }
-                                    else if (op.type == 'Per_Selected_Night') {
-                                        priceText += '****';
-                                    }
+                    if (room.Quotes.Quote.BookingExtras.BookingExtra.length) {
+                        $.each(room.Quotes.Quote.BookingExtras.BookingExtra, function (i, extra) {
+                            $.each(options, function (j, option) {
+                                if (option.id == extra.booking_extra_option_id) {
+                                    options_html.push(_option(option));
                                 }
-                                else if (option.FlatCharge) {
-                                    var op = option.FlatCharge;
-
-                                    priceText += op.price;
-
-                                    if (op.type == 'Once_Off') {
-                                    }
-                                    else if (op.type == 'Per_Night') {
-                                        priceText += '**';
-                                    }
-                                    else if (op.type == 'Per_Selected_Night') {
-                                        priceText += '*****';
-                                    }
-                                }
-                                else if (option.UnitCharge) {
-                                    var op = option.UnitCharge;
-
-                                    priceText += op.per_unit_price;
-
-                                    if (op.type == 'Per_Night') {
-                                        priceText += '**';
-                                    }
-                                    else if (op.type == 'Per_Selected_Night') {
-                                        priceText += '*****';
-                                    }
-
-                                    selector = '\
-                                    <div class="numbers-row numbers-row-small pull-right">\
-                                    <input type="text" value="1" max="'+ op.max_unit + '" class="qty2 form-control" name="unit['+ option.id +']">\
-                                    </div>\
-                                    ';
-                                }
-
-                                options_html.push('\
-                        <tr>\
-                            <td>\
-                                ' + option.name + '\
-                                <strong>\
-                                '+ priceText + '\
-                                </strong>\
-                            </td>\
-                            <td>\
-                                <label class="switch-light switch-ios pull-right">\
-                                    <input type="checkbox" name="option[' + option.id + ']" id="option_' + option.id + '" onchange="optionChanged(this)" value="1">\
-                                    <span>\
-                                    <span>No</span>\
-                                    <span>Yes</span>\
-                                    </span>\
-                                    <a></a>\
-                                </label>\
-                                '+ selector +'\
-                            </td>\
-                        </tr>');
-
-                            }
+                            });
                         });
-                    });
-                } else options_html.push('<tr><td class="text-center" colspan="2">No available booking extras founded.</td></tr>');
+                    } else {
+                        if (options.id == room.Quotes.Quote.BookingExtras.BookingExtra.booking_extra_option_id) {
+                            options_html.push(_option(options));
+                        }
+                    }
+                } else options_html.push('<tr><td class="text-center" colspan="2">No available booking extras found.</td></tr>');
 
                 $('table.options_cart tbody').html(options_html.join(''));
 

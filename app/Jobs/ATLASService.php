@@ -56,7 +56,8 @@ class ATLASService extends Job implements SelfHandling
                 foreach ($result['products'] as &$product) {
                     $product['optin'] = false;
 
-                    if (sizeof($product['txa_identifier'])) $providers[] = $product['txa_identifier'][0];
+                    if (isset($product['txa_identifier']) && sizeof($product['txa_identifier']))
+                        $providers[] = $product['txa_identifier'][0];
                 }
 
                 $optins = $this->OBXService->providerOptIn($providers);
@@ -66,7 +67,8 @@ class ATLASService extends Job implements SelfHandling
                         if (is_array($optins->Channels->Channel->Providers->Provider)) {
                             foreach ($optins->Channels->Channel->Providers->Provider as $provider) {
                                 foreach ($result['products'] as &$product) {
-                                    if (!sizeof($product['txa_identifier'])) continue;
+                                    if (!isset($product['txa_identifier']) || (isset($product['txa_identifier']) && !sizeof($product['txa_identifier'])))
+                                        continue;
 
                                     if ($product['txa_identifier'][0] == $provider->short_name) $product['optin'] = true;
                                 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Jobs\AccommodationService;
 use App\Jobs\ATLASService;
+use App\Jobs\OBXService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -100,7 +101,7 @@ class AccommodationsController extends Controller
         return view('accommodations.list', compact('accommodations', 'total', 'paginator'));
     }
 
-    public function show(ATLASService $ATLASService, AccommodationService $accommodationService, $id)
+    public function show(ATLASService $ATLASService, OBXService $OBXService, AccommodationService $accommodationService, $id)
     {
         $model = $ATLASService->getProduct($id);
 
@@ -117,8 +118,14 @@ class AccommodationsController extends Controller
             'size' => 20
         ]);
 
+        $provider = $OBXService->getProvider($accommodationService->getTXAShortName());
+
         //dd($model);
 
-        return view('accommodations.show', ['model' => $accommodationService, 'nearest' => $nearest]);
+        return view('accommodations.show', [
+                'model' => $accommodationService,
+                'nearest' => $nearest,
+                'provider' => $provider
+        ]);
     }
 }

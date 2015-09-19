@@ -38,7 +38,7 @@
             @include('attractions.partials.list_element')
         @endif
     @empty
-        <div class="text-center">No attractions founded.</div>
+        <div class="text-center">No attractions found.</div>
     @endforelse
 
     <hr>

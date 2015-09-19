@@ -14,10 +14,11 @@ class BookingController extends Controller
     public function quote($type, $shortName, OBXService $OBXService, Request $request)
     {
         $quote = $OBXService->getBookingQuote($request->all(), $type, $shortName);
+        $provider = $OBXService->getProvider($shortName);
 
-        //dd($quote);
+        $provider = $provider->Channels->Channel->Providers->Provider;
 
-        return view('booking.quote', compact('quote', 'shortName', 'type'));
+        return view('booking.quote', compact('quote', 'provider', 'shortName', 'type'));
     }
 
     public function make(Request $request, OBXService $OBXService)
