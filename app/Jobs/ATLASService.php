@@ -52,7 +52,6 @@ class ATLASService extends Job implements SelfHandling
             $providers = [];
 
             if (isset($result['products']) && sizeof($result['products']) > 0) {
-
                 foreach ($result['products'] as &$product) {
                     $product['optin'] = false;
 
@@ -75,7 +74,8 @@ class ATLASService extends Job implements SelfHandling
                             }
                         } else {
                             foreach ($result['products'] as &$product) {
-                                if (!sizeof($product['txa_identifier'])) continue;
+                                if (!isset($product['txa_identifier']) || (isset($product['txa_identifier']) && !sizeof($product['txa_identifier'])))
+                                    continue;
 
                                 if ($product['txa_identifier'][0] == $optins->Channels->Channel->Providers->Provider->short_name) $product['optin'] = true;
                             }
