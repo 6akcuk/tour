@@ -34,8 +34,8 @@
             <div class="col-md-12">
                 <div id="social_footer">
                     <ul>
-                        <li><a href="#"><i class="icon-facebook"></i></a></li>
-                        <li><a href="#"><i class="icon-twitter"></i></a></li>
+                        <li><a href="http://www.facebook.com/backpackers.com.au"><i class="icon-facebook"></i></a></li>
+                        <li><a href="http://www.twitter.com/backpackersau"><i class="icon-twitter"></i></a></li>
                         <!--<li><a href="#"><i class="icon-google"></i></a></li>
                         <li><a href="#"><i class="icon-instagram"></i></a></li>
                         <li><a href="#"><i class="icon-pinterest"></i></a></li>
