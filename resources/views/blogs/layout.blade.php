@@ -1,6 +1,7 @@
 @extends('layouts.main')
 
 @section('header', 'Blog')
+@section('main_bg', 'img/backgrounds/Blogs-min-blur.jpg')
 
 @section('content')
     <div class="row">

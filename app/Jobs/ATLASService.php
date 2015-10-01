@@ -56,7 +56,7 @@ class ATLASService extends Job implements SelfHandling
                     $product['optin'] = false;
 
                     if (isset($product['txa_identifier']) && sizeof($product['txa_identifier']))
-                        $providers[] = $product['txa_identifier'][0];
+                        $providers = array_merge($providers, $product['txa_identifier']);
                 }
 
                 $optins = $this->OBXService->providerOptIn($providers);
@@ -69,7 +69,7 @@ class ATLASService extends Job implements SelfHandling
                                     if (!isset($product['txa_identifier']) || (isset($product['txa_identifier']) && !sizeof($product['txa_identifier'])))
                                         continue;
 
-                                    if ($product['txa_identifier'][0] == $provider->short_name) $product['optin'] = true;
+                                    if (in_array($provider->short_name, $product['txa_identifier'])) $product['optin'] = true;
                                 }
                             }
                         } else {
@@ -77,7 +77,8 @@ class ATLASService extends Job implements SelfHandling
                                 if (!isset($product['txa_identifier']) || (isset($product['txa_identifier']) && !sizeof($product['txa_identifier'])))
                                     continue;
 
-                                if ($product['txa_identifier'][0] == $optins->Channels->Channel->Providers->Provider->short_name) $product['optin'] = true;
+                                if (in_array($optins->Channels->Channel->Providers->Provider->short_name, $product['txa_identifier']))
+                                    $product['optin'] = true;
                             }
                         }
                     } /*else {
@@ -93,10 +94,13 @@ class ATLASService extends Job implements SelfHandling
         elseif ($service == 'product') {
             $srv = new ProductService($this, $result);
 
-            $optins = $this->OBXService->providerOptIn([$srv->getTXAShortName()]);
+            $optins = $this->OBXService->providerOptIn($srv->getTXAShortNames());
 
             if (isset($optins->Channels)) {
                 $result['optin'] = true;
+
+                // We did this, because some products has few identifiers
+                $result['optin_shortname'] = $optins->Channels->Channel->Providers->Provider->short_name;
             } else {
                 $result['optin'] = false;
             }

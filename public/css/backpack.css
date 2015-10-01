@@ -9,7 +9,7 @@
 }
 
 #search_container {
-  background-image: url('../img/bg.jpg');
+  background-image: url('../img/backgrounds/Home-min-blur.jpg');
   height: 600px;
 }
 
@@ -115,6 +115,10 @@
 }
 .numbers-row-small .qty2 {
   left: 23px;
+}
+
+label.dd-selected-text {
+  padding: 10px 0;
 }
 
 /** Typeahed **/

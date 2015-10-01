@@ -4,6 +4,8 @@
 
 @if ($model->getParallaxImage())
     @section('main_bg', $model->getParallaxImage())
+@else
+    @section('main_bg', 'img/backgrounds/Events-min-blur.jpg')
 @endif
 
 @section('parallax_content')

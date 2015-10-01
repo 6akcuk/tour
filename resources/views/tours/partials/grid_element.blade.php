@@ -1,3 +1,5 @@
+@inject('helper', 'App\Jobs\ServiceHelper')
+
 <div class="col-md-{{ $columns == 2 ? 6 : 4 }} col-sm-6 zoomIn" data-wow-delay="0.1s">
     <div class="hotel_container">
         <div class="img_container">

@@ -1,6 +1,7 @@
 @extends('layouts.main')
 
 @section('header', 'Hires')
+@section('main_bg', 'img/backgrounds/Hire-min-blur.jpg')
 
 @section('content')
     <div class="row">

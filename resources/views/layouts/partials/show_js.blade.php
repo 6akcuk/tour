@@ -41,7 +41,7 @@
 </script>
 
 <!-- Map View -->
-<script src="http://maps.googleapis.com/maps/api/js"></script>
+<script src="//maps.googleapis.com/maps/api/js"></script>
 <script src="js/infobox.js"></script>
 <script src="js/map.js"></script>
 <script>

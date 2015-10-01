@@ -27,5 +27,14 @@ class ServiceHelper extends Job implements SelfHandling
         //
     }
 
-
+    /**
+     * Changes url into auto scheme
+     *
+     * @param $url
+     * @return mixed
+     */
+    public function changeToAutoScheme($url)
+    {
+        return str_replace(['http://', 'https://'], '//', $url);
+    }
 }

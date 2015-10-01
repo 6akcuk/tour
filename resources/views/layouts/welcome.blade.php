@@ -43,7 +43,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Accommodation type</label>
-                                {!! Form::select('type', config('tours.accommodations_types'), null, ['class' => 'form-control']) !!}
+                                {!! Form::select('type', config('tours.accommodations_types'), null, ['class' => 'form-control ddslick']) !!}
                             </div>
                         </div>
                     </div>
@@ -79,7 +79,7 @@
                     </div>-->
                     <div class="row geo_search"></div>
                     <hr>
-                    <button class="btn_1 green"><i class="icon-search"></i>Search now</button>
+                    <button class="btn_1"><i class="icon-search"></i>Search now</button>
                 </form>
             </div>
 
@@ -96,13 +96,13 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Tour type</label>
-                                {!! Form::select('type', config('tours.tours_types'), null, ['class' => 'form-control']) !!}
+                                {!! Form::select('type', config('tours.tours_types'), null, ['class' => 'form-control ddslick']) !!}
                             </div>
                         </div>
                     </div><!-- End row -->
                     <div class="row geo_search"></div>
                     <hr>
-                    <button class="btn_1 green"><i class="icon-search"></i>Search now</button>
+                    <button class="btn_1"><i class="icon-search"></i>Search now</button>
                 </form>
             </div><!-- End rab -->
 
@@ -119,7 +119,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Attraction type</label>
-                                {!! Form::select('type', config('tours.attractions_types'), null, ['class' => 'form-control']) !!}
+                                {!! Form::select('type', config('tours.attractions_types'), null, ['class' => 'form-control ddslick']) !!}
                             </div>
                         </div>
                     </div><!-- End row -->
@@ -134,7 +134,7 @@
                     </div> <!-- End row -->
                     <div class="row geo_search"></div>
                     <hr>
-                    <button class="btn_1 green"><i class="icon-search"></i>Search now</button>
+                    <button class="btn_1"><i class="icon-search"></i>Search now</button>
                 </form>
             </div>
 
@@ -151,7 +151,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Event type</label>
-                                {!! Form::select('type', config('tours.events_types'), null, ['class' => 'form-control']) !!}
+                                {!! Form::select('type', config('tours.events_types'), null, ['class' => 'form-control ddslick']) !!}
                             </div>
                         </div>
                     </div><!-- End row -->
@@ -180,7 +180,7 @@
                     </div> <!-- End row -->
                     <div class="row geo_search"></div>
                     <hr>
-                    <button class="btn_1 green"><i class="icon-search"></i>Search now</button>
+                    <button class="btn_1"><i class="icon-search"></i>Search now</button>
                 </form>
             </div>
 
@@ -197,13 +197,13 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Hire type</label>
-                                {!! Form::select('type', config('tours.hires_types'), null, ['class' => 'form-control']) !!}
+                                {!! Form::select('type', config('tours.hires_types'), null, ['class' => 'form-control ddslick']) !!}
                             </div>
                         </div>
                     </div>
                     <div class="row geo_search"></div>
                     <hr>
-                    <button class="btn_1 green"><i class="icon-search"></i>Search now</button>
+                    <button class="btn_1"><i class="icon-search"></i>Search now</button>
                 </form>
             </div>
         </div>
