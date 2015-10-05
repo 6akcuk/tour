@@ -33,8 +33,8 @@ class AccommodationsController extends Controller
             $params['end'] = $to;
         }
 
-        //$fac = ['ESC_TXA_DEFAULT', 'ESC_TXA_MULTI'];
-        $fac = [];
+        $fac = ['ESC_TXA_DEFAULT', 'ESC_TXA_MULTI'];
+        //$fac = [];
 
         if ($request->input('filter')) {
             foreach ($request->input('filter') as $fl) {

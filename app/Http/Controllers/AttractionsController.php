@@ -35,8 +35,8 @@ class AttractionsController extends Controller
             $params['maxRate'] = max($rates);
         }
 
-        //$exp = ['ESC_TXA_DEFAULT', 'ESC_TXA_MULTI'];
-        $exp = [];
+        $exp = ['ESC_TXA_DEFAULT', 'ESC_TXA_MULTI'];
+        //$exp = [];
 
         if ($request->input('filter')) {
             foreach ($request->input('filter') as $fl) {
