@@ -140,7 +140,7 @@ class ATLASService extends Job implements SelfHandling
                 'dsc' => 'false',
                 'ratings' => '-1,0.5,1,1.5,2,2.5,3,3.5,4,4.5,5',
                 'fl' => 'product_id,product_name,product_image,rate_from, product_classifications',
-                //'att' => 'ESC_TXA_MULTI|ESC_TXA_DEFAULT',
+                'att' => 'ESC_TXA_MULTI|ESC_TXA_DEFAULT',
                 'order' => 'rating_aaa desc,rnd'
         ]);
     }
