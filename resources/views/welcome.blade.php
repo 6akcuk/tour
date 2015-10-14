@@ -126,8 +126,10 @@
                                             $('#city-'+ i).ddslick({
                                                 data: cityData,
                                                 onSelected: function (selectedData) {
-                                                    var city = selectedData.selectedData.text;
-                                                    $('#city-'+ i + ' input[name="city"]').val(city);
+                                                    if (selectedData.selectedData.text != 'All Cities') {
+                                                        var city = selectedData.selectedData.text;
+                                                        $('#city-' + i + ' input[name="city"]').val(city);
+                                                    }
                                                 }
                                             });
                                         } else {

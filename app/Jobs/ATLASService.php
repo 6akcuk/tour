@@ -32,6 +32,13 @@ class ATLASService extends Job implements SelfHandling
         //
     }
 
+    /**
+     * Send query to ATLAS API.
+     *
+     * @param $service
+     * @param array $params
+     * @return mixed
+     */
     protected function query($service, $params = [])
     {
         // Automatically add in FL field TXA_IDENTIFIER
@@ -198,4 +205,32 @@ class ATLASService extends Job implements SelfHandling
         return $this->getTopProducts('HIRE');
     }
 
+    /**
+     * Get a list of all states.
+     *
+     * @return mixed
+     */
+    public function states()
+    {
+        return $this->query('states');
+    }
+
+    /**
+     * Get a list of regions: all or filtered by state.
+     *
+     * @param string $state
+     * @return mixed
+     */
+    public function regions($state = '')
+    {
+        $params = [];
+        if ($state) $params['st'] = $state;
+
+        return $this->query('regions', $params);
+    }
+
+    public function suburbs($params = [])
+    {
+        return $this->query('suburbs', $params);
+    }
 }

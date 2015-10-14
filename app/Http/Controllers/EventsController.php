@@ -20,7 +20,7 @@ class EventsController extends Controller
         if ($request->input('terms')) $params['term'] = $request->input('terms');
         if ($request->input('type')) $params['cla'] = $request->input('type');
         if ($request->input('state')) $params['st'] = $request->input('state');
-        if ($request->input('region')) $params['rg'] = $request->input('region');
+        if ($request->input('region')) $params['ar'] = $request->input('region');
         if ($request->input('city')) $params['ct'] = $request->input('city');
         if ($request->input('from')) {
             $from = Carbon::parse($request->input('from'))->format('Y-m-d');
