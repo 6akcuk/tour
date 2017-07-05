@@ -3,13 +3,13 @@
 return [
 
     'atlas_host' => 'atlas.atdw.com.au',
-    'atlas_key' => '201407151532',
+    'atlas_key' => '',
 
     //'obx_account' => 'Test_V3_Offload',
-    //'obx_key' => '60E0533B-6E38-4779-A7D7-0D82BF824C55',
+    //'obx_key' => '',
 
     'obx_account' => 'Backpackers_web',
-    'obx_key' => '30620B0F-D399-4E75-BB45-D8DA06F41E68',
+    'obx_key' => '',
 
     'contact_email' => '6akcuk@gmail.com',
     'contact_name' => 'Backpackers.com.au',
